@@ -42,8 +42,20 @@ brew install themekit
 * Setup Api access
 *  `theme templates and theme assets`
 * Pick `Read and write`
-* On Save `Api key` and `Password` will appear.
+* On Save `Api key` and `Password` will appear. Copy the password
+
+
+## Dev Env
+* clone the project
+* run `theme watch`
 
 
 
+## Stickers
+Depuis juin 2019, Shopify a généralisé le concept de Section (l'équivalent de nos blocs Stickers). La section permet de créer un template par assemblage de sections.
+Dans le Back-office, l'utilisateur pourra ajouter/déplacer/configurer des sections.
+
+## Développement du thème
+- Installer les snippets vscode : https://marketplace.visualstudio.com/items?itemName=killalau.vscode-liquid-snippets
+Shopify utilise par défaut jQuery et les scss qu'il est capable de compiler depuis ses serveurs.
 
