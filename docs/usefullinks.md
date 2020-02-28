@@ -8,7 +8,7 @@
 - Tuto theme design : https://www.youtube.com/playlist?list=PLlMkWQ65HlcEJMRRdnqxpbGImqBkIOctd
 - starter theme : https://github.com/Shopify/starter-theme
 
-# Create an app
+## Create an app
 ```
 npm install --save react react-dom next
 npm install --save koa @shopify/koa-shopify-auth dotenv koa-session isomorphic-fetch
@@ -18,5 +18,5 @@ Créer une app depuis la home partner et suivre le tuto : https://developers.sho
 App explorer graphQL : https://shopify-graphiql-app.shopifycloud.com/login et lui donner tous les droits
 Réduire
 
-# Training
+## Training
 partner academy : https://partner-training.shopify.com/my_courses

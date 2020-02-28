@@ -45,17 +45,18 @@ brew install themekit
 * On Save `Api key` and `Password` will appear. Copy the password
 
 
-## Dev Env
+## Development Environment
+
+### local
 * clone the project
 * run `theme watch`
 
 
+### Stickers
+From june 2019 , Shopify has generalized the concept of Section (the equivalent of our Sticker Blocks). The section allows you to create a template by assembling sections.
+In the Back-office, user could add/move/configure sections.
 
-## Stickers
-Depuis juin 2019, Shopify a généralisé le concept de Section (l'équivalent de nos blocs Stickers). La section permet de créer un template par assemblage de sections.
-Dans le Back-office, l'utilisateur pourra ajouter/déplacer/configurer des sections.
-
-## Développement du thème
-- Installer les snippets vscode : https://marketplace.visualstudio.com/items?itemName=killalau.vscode-liquid-snippets
-Shopify utilise par défaut jQuery et les scss qu'il est capable de compiler depuis ses serveurs.
+### Développement du thème
+- Vscode Snippets : `https://marketplace.visualstudio.com/items?itemName=killalau.vscode-liquid-snippets`
+- Shopify uses jQuery and scss shpofy is able compiler them from his servers.
 
