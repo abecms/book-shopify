@@ -47,7 +47,7 @@ brew install themekit
 
 ## Development Environment
 
-### local
+### Local
 * clone the project
 * run `theme watch`
 
