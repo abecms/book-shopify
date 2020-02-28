@@ -1,6 +1,6 @@
 # How to create a store
 
-Login to your partner shopify account.
+ Login to your partner shopify account.
 
 ## Add Store
 
