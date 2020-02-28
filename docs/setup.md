@@ -22,10 +22,13 @@
 
 # Theme
 
+To build you own theme you should have
+* a private app with api key and a password.
+* themekit installed on your dev env.
+
 ## Themekit
 
-### MacOs
-
+### Install on MacOs
 ```
 brew tap shopify/shopify
 brew install themekit
@@ -39,6 +42,8 @@ brew install themekit
 * Setup Api access
 *  `theme templates and theme assets`
 * Pick `Read and write`
+* On Save `Api key` and `Password` will appear.
 
 
-## Setup api credentials
+
+
