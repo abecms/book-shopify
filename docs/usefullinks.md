@@ -192,3 +192,202 @@ Display the corresponding media on your product page :
         </div>
 {% endcase %}
 ```
+
+## Newsletter Section
+This section is an example of a fully functional newsletter including the possibility for the admin to enter the title and label of the newsletter.
+
+Don't forget to add translations for the submit button and placeholder in the locales files.
+
+```
+<div class="cp-newsletter" data-section-id="{{ section.id }}" data-section-type="newsletter-section">
+{%- if section.settings.image != blank -%}
+  <style>
+    /* default screen, non-retina */
+    .newsletter .newsletter__inner {
+      background-image: url({{ section.settings.image | img_url: '720x' }});
+    }
+    @media (min-width: 992px) {
+      /* Small screen, non-retina */
+      .newsletter .newsletter__inner {
+        background-image: url({{ section.settings.image | img_url: '1350x' }});
+      }
+    }
+  </style>
+	<div class="newsletter">
+		<div class="section">
+			<div class="container-fluid">
+				<div class="newsletter__inner">
+					<div class="newsletter__content">
+						<h2 class="newsletter__title">
+							{{ section.settings.title | escape }}
+						</h2><!-- /.newsletter__title -->
+
+						<div class="newsletter__entry">
+							<p>
+								{{ section.settings.label | escape }}
+							</p>
+						</div><!-- /.newsletter__entry -->
+					</div><!-- /.newsletter__content -->
+
+					<div class="newsletter__actions">
+						<div class="subscribe">
+                            {%- assign formId = 'Contact_' | append: section.id -%}
+                            {% form 'customer', id: formId, novalidate: 'novalidate', class: 'contact-form form-single-field' %}
+                            {%- if form.posted_successfully? -%}
+                                <p class="form-message form-message--success" style="color:#fff" tabindex="-1" data-form-status>
+                                {{ 'general.newsletter_form.confirmation' | t }}
+                                </p>
+                            {%- else -%}
+                                <input type="hidden" name="contact[tags]" value="newsletter">
+                                <div class="input-group {% if form.errors %} input-group--error{% endif %}">
+                                    <input type="email"
+                                    name="contact[email]"
+                                    id="{{ formId }}-email"
+                                    class="form-control subscribe__field{% if form.errors %} input--error{% endif %}"
+                                    value="{{ form.email }}"
+                                    placeholder="{{ 'general.newsletter_form.email_placeholder' | t }}"
+                                    aria-label="{{ 'general.newsletter_form.email_placeholder' | t }}"
+                                    aria-required="true"
+                                    autocorrect="off"
+                                    autocapitalize="off"
+                                    {% if form.errors %}
+                                        aria-invalid="true"
+                                        aria-describedby="{{ formId }}-email-error"
+                                        data-form-status
+                                    {% endif %}
+                                    >
+                                    <button type="submit" class="subscribe__btn" name="commit" id="Subscribe" style="z-index:5">
+                                        <span>{{ 'general.newsletter_form.submit' | t }}</span>
+                                    </button>
+                                </div>
+                                {%- if form.errors contains 'email' -%}
+                                    <span id="{{ formId }}-email-error" class="input-error-message">
+                                    <span class="visually-hidden">{{ 'general.accessibility.error' | t }} </span>
+                                    {% render 'icon-error' %}
+                                    <span>{{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}.</span>
+                                    </span>
+                                {%- endif -%}
+                            {%- endif -%}
+                            {% endform %}
+						</div><!-- /.subscribe -->
+					</div><!-- /.newsletter__actions -->
+				</div><!-- /.newsletter__inner -->
+			</div><!-- /.container-fluid -->
+		</div><!-- /.section -->
+	</div><!-- /.newsletter -->
+{%- endif -%}
+</div><!-- /.cp-newsletter -->
+
+{% schema %}
+{
+  "name": {
+    "en": "Newsletter",
+    "fr": "Newsletter"
+  },
+  "class": "index-section index-section--flush",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": {
+        "en": "Image",
+        "fr": "Image"
+      }
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": {
+        "en": "Title",
+        "fr": "Titre"
+      },
+      "default": {
+          "en" : "Subscribe to our newsletter",
+          "fr" : "S'inscrire à notre newsletter"
+      }
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": {
+        "en": "Label",
+        "fr": "Label"
+      },
+      "default": {
+          "en" : "Stay informed",
+          "fr" : "Restez informé de nos bons plans et nouveautés"
+      }
+    },
+    {
+      "type": "paragraph",
+      "content": {
+        "da": "Alle kunder, der tilmelder sig, får oprettet en konto i Shopify. [Se kunder](/admin/customers?query=&accepts_marketing=1)",
+        "de": "Alle Kunden, die sich eintragen, bekommen ein Konto in Shopify. [Kunden ansehen](/admin/customers?query=&accepts_marketing=1)",
+        "en": "Any customers who sign up will have an account created for them in Shopify. [View customers](/admin/customers?query=&accepts_marketing=1)",
+        "es": "Todos los clientes que se registren tendrán una cuenta creada para ellos en Shopify. [Ver clientes](/admin/customers?query=&accepts_marketing=1)",
+        "fi": "Tilaaville asiakkaille luodaan tili Shopify-palvelussa. [Näytä asiakkaat](/admin/customers?query=&accepts_marketing=1)",
+        "fr": "Tous les clients qui s'inscrivent auront un compte créé pour eux sur Shopify. [Voir les clients](/admin/customers?query=&accepts_marketing=1)",
+        "hi": "साइन अप करने वाले किसी भी ग्राहक के लिए Shopify में एक खाता बनाया जाएगा. [ग्राहक देखें](/admin/customers?query=&accepts_marketing=1)",
+        "it": "Qualsiasi cliente che si iscrive avrà un account creato appositamente su Shopify. [Visualizza clienti](/admin/customers?query=&accepts_marketing=1)",
+        "ja": "サインアップしたお客様は、Shopifyでアカウントが作成されます。[お客様を表示](/admin/customers?query=&accepts_marketing=1)",
+        "ko": "가입한 고객은 Shopify에서 생성된 계정을 보유하게 됩니다. [고객보기](/admin/customers? query=& accepts_marketing=1)",
+        "ms": "Mana-mana pelanggan yang mendaftar akan mempunyai akaun yang dicipta untuk mereka di Shopify. [Lihat pelanggan](/admin/pelanggan?Query=&accepts_marketing=1)",
+        "nb": "Alle kunder som melder seg på, vil få opprettet en konto i Shopify. [Se kunder](/admin/customers?query=&accepts_marketing=1)",
+        "nl": "Voor alle klanten die zich aanmelden, wordt een Shopify-account gemaakt. [Klanten weergeven](/admin/customers?query=&accepts_marketing=1)",
+        "pt-BR": "Todos os clientes que se inscreverem terão uma conta criada para eles na Shopify. [View customers](/admin/customers?query=&accepts_marketing=1)",
+        "pt-PT": "Será criada uma conta na Shopify para todos os clientes que se registarem. [Ver clientes](/admin/customers?query=&accepts_marketing=1)",
+        "sv": "Alla kunder som registrerar sig kommer att få ett konto skapat i Shopify. [Visa kunder](/ admin / kunder? Query = & accepts_marketing = 1)",
+        "th": "ระบบจะสร้างบัญชีผู้ใช้ใน Shopify ให้แก่ลูกค้ารายใดก็ตามที่ลงทะเบียน [ดูลูกค้า](/admin/customers?query=&accepts_marketing=1)",
+        "zh-CN": "任何注册用户都将在 Shopify 中拥有一个为他们创建的帐户。[查看客户](/admin/customers?query=&accepts_marketing=1)",
+        "zh-TW": "顧客註冊後就可以擁有 Shopify 帳戶。[檢視顧客](/admin/customers?query=&accepts_marketing=1)"
+      }
+    }
+  ],
+  "presets": [
+    {
+        "name": {
+            "en": "Newsletter",
+            "fr": "Newsletter"
+        },
+        "category": {
+            "en": "Promotional",
+            "fr": "Promotionnel"
+        }
+    }
+  ]
+}
+{% endschema %}
+```
+
+## Translations
+To prepare your theme for translation, use the files in /locales
+example (en.default.json): 
+```
+{
+  "general": {
+    "newsletter_form": {
+      "email_placeholder": "Email address",
+      "confirmation": "Thanks for subscribing!",
+      "submit": "OK"
+    }
+  }
+}
+```
+
+fr.json:
+```
+{
+  "general": {
+    "newsletter_form": {
+      "email_placeholder": "Votre adresse email",
+      "confirmation": "Merci pour votre inscription!",
+      "submit": "OK"
+    }
+  }
+}
+```
+
+You'll use these labels in your liquid templates:
+```
+{{ 'general.newsletter_form.confirmation' | t }}
+```
