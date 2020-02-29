@@ -31,6 +31,8 @@ When you create a page based on stickers, you :
 - Add section in this template (you may add sections to layout too)
 - Create snippets inside sections
 
+| CAUTION : Your assets directory can't have subdirectories, nor the other folders ! (no /images subdirectory, not /fonts etc...
+
 ### diffence between section and snippet
 Sections divide your page into blocks of content. Snippets are reusable components across the site which can be rendered inside your sections, your templates, or even under your layout.
 
