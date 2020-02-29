@@ -50,3 +50,10 @@ use the ```render```tag :
 {% render 'cp-header' %}
 ```
  And create the related file in the ```snippets``` directory of your theme
+
+## insert a js
+```<script src="{{ 'vendors.js' | asset_url }}" defer="defer"></script>```
+
+## insert a css
+```{{ 'app.css' | asset_url | stylesheet_tag }}```
+
