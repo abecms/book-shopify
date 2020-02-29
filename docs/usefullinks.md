@@ -59,3 +59,22 @@ use the ```render```tag :
 ## insert a css
 ```{{ 'app.css' | asset_url | stylesheet_tag }}```
 
+
+## nested sections
+To incule sections inside sections (taken from https://community.shopify.com/c/Shopify-Design/Nested-Sections/m-p/424873) : 
+```
+{% capture sidebar_content_1 %}{% section 'sidebar-1' %}{% endcapture %}
+{% capture sidebar_content_2 %}{% section 'sidebar-2' %}{% endcapture %}
+
+{% assign sidebar_content_1 = sidebar_content1 | replace: 'class="shopify-section"', 'class="shopify-section-nested"' %}
+{% assign sidebar_content_2 = sidebar_content2 | replace: 'class="shopify-section"', 'class="shopify-section-nested"' %}
+
+{% capture collection_template_content %}
+    {% section 'collection' %}
+{% endcapture %}
+
+{% assign collection_template_content = collection_template_content | replace: "%%SIDEBAR-1%%", sidebar_content_1 %}
+{% assign collection_template_content = collection_template_content | replace: "%%SIDEBAR-2%%", sidebar_content_2 %}
+
+{{collection_template_content}}
+```
