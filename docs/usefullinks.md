@@ -78,3 +78,86 @@ To incule sections inside sections (taken from https://community.shopify.com/c/S
 
 {{collection_template_content}}
 ```
+
+## Image management
+https://www.shopify.com/partners/blog/img-url-filter
+https://www.shopify.com/partners/blog/using-responsive-images
+
+All of the following techniques apply to :
+- img_url
+- product_img_url
+- collection_img_url
+- article_img_url
+
+use the ```img_url``` filter to format an image URL :
+```
+{{ product.featured_image | img_url: '100x100' }}
+```
+
+You notice that you may select a size ```100x100```. You can also select only a width or only a height :
+```
+width : {{ product.featured_image | img_url: '100x' }}
+height : {{ product.featured_image | img_url: 'x100' }}
+```
+
+You can also generate the full ```<img/>``` tag :
+```
+{{ product.featured_image | img_url: '100x100' | img_tag }}
+```
+
+### Crop an image
+```
+{{ product.featured_image | img_url: '450x450’, crop: ‘center’ }}
+```
+
+### Scale an image
+we can also request a certain pixel density using the scale parameter.
+
+The two valid options are:
+- 2
+- 3
+
+```
+{ product.featured_image | img_url: '450x450’, crop: ‘center’, scale: 2 }}
+```
+
+### responsive image
+```
+<img id="{{ img_id }}"
+    class="article__grid-image lazyload"
+    src="{{ article.image | img_url: '300x300' }}"
+    data-src="{{ img_url }}"
+    data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]"
+    data-aspectratio="{{ article.image.aspect_ratio }}"
+    data-sizes="auto">
+```
+
+The different sizes will be used depending on the browser definition and size.
+
+Note the class ```lazyload``` which pertains to https://github.com/aFarkas/lazysizes
+What this plugin does is temporarily preload a small image as a placeholder, while the correct image is loads. This reduces any time when a blank space would be shown where the slideshow should appear.
+
+### Responsive background image
+Dynamically making a background image is not easy. Here is the trick to make it possible :
+
+```
+<style>
+    /* default screen, non-retina */
+    .intro {
+      background-image: url({{ section.settings.image | img_url: '720x' }});
+    }
+    @media (min-width: 992px) {
+      /* Small screen, non-retina */
+      .intro {
+        background-image: url({{ section.settings.image | img_url: '1350x' }});
+      }
+    }
+</style>
+	<div class="intro">
+   ...
+ </div>
+```
+
+In this example of a liquid section, you see that we define a style depending on the screen size and apply it to the class ```intro```.
+
+
