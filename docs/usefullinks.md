@@ -161,3 +161,34 @@ Dynamically making a background image is not easy. Here is the trick to make it 
 In this example of a liquid section, you see that we define a style depending on the screen size and apply it to the class ```intro```.
 
 
+## Product
+
+Display the corresponding media on your product page :
+1. In your product template:
+```
+{% for media in product.media %}
+   {% include 'media' %}
+{% endfor %}
+``` 
+2. Create a media snippet :
+```
+{% case media.media_type %}
+      {% when 'image' %}
+      {% when 'external_video' %}
+        <div class="product-single__media" style="padding-top: {{ 1 | divided_by: media.aspect_ratio | times: 100}}%;" data-media-id="{{ media.id }}">
+          {{ media | external_video_tag }}
+        </div>
+      {% when 'video' %}
+        <div class="product-single__media" data-media-id="{{ media.id }}">
+          {{ media | video_tag: controls: true }}
+        </div>
+      {% when 'model' %}
+        <div class="product-single__media" style="padding-top: 100%" data-media-id="{{ media.id }}">
+          {{ media | model_viewer_tag }}
+        </div>
+      {% else %}
+        <div class="product-single__media" style="padding-top: 100%;" data-media-id="{{ media.id }}">
+          {{ media | media_tag }}
+        </div>
+{% endcase %}
+```
