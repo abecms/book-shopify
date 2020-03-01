@@ -20,6 +20,22 @@
 * In `Accounts and permissions` - click on `Add staff account`
 * Fill `firstname / last name and Email` and click on `invite`
 
+# Change the default language of your store
+
+* For your published theme, tap the Actions drop-down menu and select Edit languages.
+* Tap Change theme language:
+* Tap Language:
+* Tap Other languages....
+* Choose from the second and third drop-down menus as follows: ...
+* Tap Save.
+* Using the language editor, enter translations for your theme text.
+
+## Add additional language to your store
+
+* Go to your site setting
+* languages
+* Translated languages
+
 # Theme
 
 To build you own theme you should have
