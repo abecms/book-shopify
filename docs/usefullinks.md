@@ -23,6 +23,9 @@ partner academy : https://partner-training.shopify.com/my_courses
 
 
 # Theme
+## Introduction
+From june 2019 , Shopify has generalized the concept of Section (the equivalent of our Sticker Blocks). The section allows you to create a template by assembling sections.
+In the Back-office, user could add/move/configure sections.
 
 ## Structure of your theme
 When you create a page based on stickers, you :
