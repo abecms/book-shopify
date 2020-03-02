@@ -42,14 +42,6 @@ To build you own theme you should have
 * a private app with api key and a password.
 * themekit installed on your dev env.
 
-## Themekit
-
-### Install on MacOs
-```
-brew tap shopify/shopify
-brew install themekit
-```
-
 ## Create private apps
 
 * Got to your Back office store - `https://nameofyourstore.myshopify.com/admin`
@@ -61,18 +53,16 @@ brew install themekit
 * On Save `Api key` and `Password` will appear. Copy the password
 
 
-## Development Environment
+# Development Environment
+- Shopify uses jQuery and scss shopify is able to compile them from his servers.
 
-### Local
-* clone the project
-* run `theme watch`
+1. Install Themekit on MacOs
+```
+brew tap shopify/shopify
+brew install themekit
+```
+2. clone the project
+3. run ```theme watch```
 
-
-### Stickers
-From june 2019 , Shopify has generalized the concept of Section (the equivalent of our Sticker Blocks). The section allows you to create a template by assembling sections.
-In the Back-office, user could add/move/configure sections.
-
-### Développement du thème
+# VSCode plugin
 - Vscode Snippets : `https://marketplace.visualstudio.com/items?itemName=killalau.vscode-liquid-snippets`
-- Shopify uses jQuery and scss shpofy is able compiler them from his servers.
-
