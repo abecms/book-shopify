@@ -1,6 +1,6 @@
 ---
-title: Ajax Mini Cart Implementation
-sidebar_label: Mini Cart Implementation
+title: Ajax - Mini Cart
+sidebar_label: Mini Cart
 ---
 
 # Table of contents
@@ -11,11 +11,8 @@ sidebar_label: Mini Cart Implementation
 
 # Create the Liquid file
 
-* In your Shopify workspace go to `templates`
-* Create a liquid file name `cart.mini.liquid` (For more explanation go to [Alternative Template](docs/alternative-template))
-* At the beginning of the file add this line ``{% layout none %}`` (For more explanation go to [Layout Tricks](docs/layout-tricks))
-* Put your Mini Cart HTML code (or include it *e.g.``{% include 'cp-quick_cart_inner' %}``*) inside the file
-* Save your file
+* Go to [Mini Cart - Create the Liquid file](/docs/cart-mini_cart#create-the-liquid-file)
+* At the beginning of the `cart.mini.liquid` add this line ``{% layout none %}`` (For more explanation go to [Layout Tricks](/docs/layout-tricks))
 
 # Create the JavaScript file
 
@@ -109,7 +106,6 @@ window.ShpCustom = window.ShpCustom || {cart: {}};
   }
 })();
 ```
-* Save your file
 
 # Update the layout file
 

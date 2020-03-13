@@ -27,6 +27,22 @@ module.exports = {
           type: 'category',
           label: 'Template',
           items: ['alternative-template', 'layout-tricks'],
+        },
+        {
+          type: 'category',
+          label: 'Cart',
+          items: ['cart-mini_cart'],
+        },
+        {
+          type: 'category',
+          label: 'Product',
+          items: [
+            {
+              type: 'category',
+              label: 'Variant',
+              items: ['product-variant-add', 'product-variant-show-in-front', 'product-variant-exploded'],
+            }
+          ],
         }
       ],
     },
