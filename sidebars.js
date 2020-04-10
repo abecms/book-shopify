@@ -43,6 +43,17 @@ module.exports = {
               items: ['product-variant-add', 'product-variant-show-in-front', 'product-variant-exploded'],
             }
           ],
+        },
+        {
+          type: 'category',
+          label: 'Customer',
+          items: [
+            {
+              type: 'category',
+              label: 'Import',
+              items: ['customer-import'],
+            }
+          ],
         }
       ],
     },
