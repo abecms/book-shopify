@@ -57,5 +57,16 @@ module.exports = {
         }
       ],
     },
+    {
+      type: 'category',
+      label: 'Import',
+      items: [
+        {
+          type: 'category',
+          label: 'Excelify',
+          items: ['magento'],
+        },
+      ]
+    }
   ]
 };
