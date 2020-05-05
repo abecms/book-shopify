@@ -8,16 +8,6 @@
 - Tuto theme design : https://www.youtube.com/playlist?list=PLlMkWQ65HlcEJMRRdnqxpbGImqBkIOctd
 - starter theme : https://github.com/Shopify/starter-theme
 
-## Create an app
-```
-npm install --save react react-dom next
-npm install --save koa @shopify/koa-shopify-auth dotenv koa-session isomorphic-fetch
-npm install --save @zeit/next-css @shopify/polaris
-```
-Créer une app depuis la home partner et suivre le tuto : https://developers.shopify.com/tutorials/build-a-shopify-app-with-node-and-react/embed-your-app-in-shopify
-App explorer graphQL : https://shopify-graphiql-app.shopifycloud.com/login et lui donner tous les droits
-Réduire
-
 ## Training
 partner academy : https://partner-training.shopify.com/my_courses
 
@@ -64,7 +54,7 @@ use the ```render```tag :
 
 
 ## nested sections
-To incule sections inside sections (taken from https://community.shopify.com/c/Shopify-Design/Nested-Sections/m-p/424873) : 
+To incule sections inside sections (taken from https://community.shopify.com/c/Shopify-Design/Nested-Sections/m-p/424873) :
 ```
 {% capture sidebar_content_1 %}{% section 'sidebar-1' %}{% endcapture %}
 {% capture sidebar_content_2 %}{% section 'sidebar-2' %}{% endcapture %}
@@ -172,7 +162,7 @@ Display the corresponding media on your product page :
 {% for media in product.media %}
    {% include 'media' %}
 {% endfor %}
-``` 
+```
 2. Create a media snippet :
 ```
 {% case media.media_type %}
@@ -364,7 +354,7 @@ Don't forget to add translations for the submit button and placeholder in the lo
 
 ## Translations
 To prepare your theme for translation, use the files in /locales
-example (en.default.json): 
+example (en.default.json):
 ```
 {
   "general": {

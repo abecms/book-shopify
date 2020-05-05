@@ -6,10 +6,67 @@
  */
 
 module.exports = {
-  docs: {
-    Setup: ['introduction', 'setup'],
-    Documentation: ['usefullinks'],
-    //Dynamisation: ['nodes', 'paragraphs', 'views', 'forms', 'taxonomies', 'tokens', 'images', 'users', 'comments', 'newsletters', 'menus', 'ckeditor', 'modules', 'coding'],
-    //'Dev specific': ['dev'],
-  },
+  docs: [
+    {
+      type: 'category',
+      label: 'Setup',
+      items: ['introduction', 'setup'],
+    },
+    {
+      type: 'category',
+      label: 'Development',
+      items: [
+        'theme', 
+        'app',
+        {
+          type: 'category',
+          label: 'Ajax',
+          items: ['ajax-mini_cart'],
+        },
+        {
+          type: 'category',
+          label: 'Template',
+          items: ['alternative-template', 'layout-tricks'],
+        },
+        {
+          type: 'category',
+          label: 'Cart',
+          items: ['cart-mini_cart'],
+        },
+        {
+          type: 'category',
+          label: 'Product',
+          items: [
+            {
+              type: 'category',
+              label: 'Variant',
+              items: ['product-variant-add', 'product-variant-show-in-front', 'product-variant-exploded'],
+            }
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Customer',
+          items: [
+            {
+              type: 'category',
+              label: 'Import',
+              items: ['customer-import'],
+            }
+          ],
+        }
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Import',
+      items: [
+        {
+          type: 'category',
+          label: 'Excelify',
+          items: ['magento'],
+        },
+      ]
+    }
+  ]
 };
