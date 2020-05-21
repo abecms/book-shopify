@@ -8,8 +8,9 @@
 module.exports = {
   docs: {
     Setup: ['introduction', 'setup'],
-    Development: ['theme', 'app'],
-    //Dynamisation: ['nodes', 'paragraphs', 'views', 'forms', 'taxonomies', 'tokens', 'images', 'users', 'comments', 'newsletters', 'menus', 'ckeditor', 'modules', 'coding'],
-    //'Dev specific': ['dev'],
+    Configuration: ['config/config'],
+    "Shopify+": ['shopifyplus'],
+    marketing: ['marketing'],
+    Development: ['dev/theme', 'dev/app', 'dev/dev']
   },
 };
