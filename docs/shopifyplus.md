@@ -13,7 +13,7 @@ https://apps.shopify.com/flow
 # Gift cards
 ## Appeler un web service depuis le checkout sur le champ discount
 
-1. Créer une app proxy qui pourra exposer une route via shopify : 
+1. Créer une app proxy qui pourra exposer une route via shopify :
 https://shopify.dev/tutorials/display-data-on-an-online-store-with-an-application-proxy-app-extension
 
 2. Avec shopify+, il est possible d'injecter le js dans le fichier layout checkout.liquid. Sans shopify+, il est possible d'injecter un js en utilisant l'astuce des js supplémentaires associés à Google Analytics depuis les préférences de shopify

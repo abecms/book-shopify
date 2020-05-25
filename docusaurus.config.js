@@ -67,11 +67,11 @@ module.exports = {
       },
       copyright: `Copyright © ${new Date().getFullYear()} Abe SAS. Built with Docusaurus.`,
     },
-    // algolia: {
-    //   apiKey: '0d9d1e39a8757f562ff84603cf0ea7b4',
-    //   indexName: 'drupal_stickers_book',
-    //   algoliaOptions: {}, // Optional, if provided by Algolia
-    // },
+    algolia: {
+      apiKey: '2b647c781fd2fddfd099b5a1dbd69db8',
+      indexName: 'shopify_livingcolor_academy',
+      algoliaOptions: {}, // Optional, if provided by Algolia
+    },
   },
   presets: [
     [
