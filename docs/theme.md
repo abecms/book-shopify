@@ -384,3 +384,26 @@ You'll use these labels in your liquid templates:
 ```
 {{ 'general.newsletter_form.confirmation' | t }}
 ```
+
+## Index for a for loop
+```
+{% for block in section.blocks %}
+    {% if forloop.index > 1 %}
+
+    {% endif %}
+{% endfor %}
+```
+## Pour aller à la ligne dans un textarea : newline_to_br
+```{{footer_client_description | newline_to_br}}```
+
+## Pour afficher un complément d'information
+- dans le settings de la section ajouter une ligne info 
+```"info": "Texte que l'on veut afficher"```
+
+## Afficher le titre d'un menu dans un template
+```{{ linklists.footer.title }}``` footer correspond à l'id du menu (ancre) dans le BO
+
+## Page
+- Afficher la description saisie dans le BO:
+```{{ page_description }}```
+
