@@ -407,3 +407,48 @@ You'll use these labels in your liquid templates:
 - Afficher la description saisie dans le BO:
 ```{{ page_description }}```
 
+## Google Tag Manager
+
+Below is the code you would enter in the additional content & scripts of then settings>checkout area of Shopify. This will allow you to create variables in google tag manager, that you can then use in the conversion tracking pixels.
+
+```
+<script>
+ window.dataLayer = window.dataLayer || [];
+ window.dataLayer.push({
+    'ecomm__orderValue': '{{ checkout.total_price | money_without_currency }}',
+    'ecomm__orderNumber': '{{ checkout.order_number }}',
+    'ecomm__itemCount': '{{ line_items.size }}',
+    'ecomm__customerEmail': '{{ checkout.customer.email }}'
+ });
+</script>
+```
+
+## Ajouter un produit automatiquement au panier
+
+Dans l'exemple, on vérifie que le produit n'est pas déjà dans le panier et que le montant du panier est > 100 (il est calculé en cents)
+
+```
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+{% assign found_title = false %}
+{% for item in checkout.line_items %}
+  {% if item.variant.id == 7387208286253 %}
+    {% assign found_title = true %}
+  {% endif %}
+{% endfor %}
+
+{% if checkout.subtotal_price > 10000 and found_title == false %}
+<script>
+  $( document ).ready(function() {
+      var variantId = 7387208286253;
+      jQuery.post('/cart/add.js', {
+        quantity: 1,
+        id: variantId
+      });
+      setTimeout(
+        function() {
+          window.location.reload(true);
+        }, 1000);
+  });
+</script>
+{% endif %}
+```

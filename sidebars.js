@@ -14,24 +14,40 @@ module.exports = {
     },
     {
       type: 'category',
+      label: 'Configuration',
+      items: ['config/config'],
+    },
+    {
+      type: 'category',
+      label: 'Marketing',
+      items: ['marketing'],
+    },
+    {
+      type: 'category',
+      label: 'Shopify+',
+      items: ['shopifyplus'],
+    },
+    {
+      type: 'category',
       label: 'Development',
       items: [
-        'theme', 
-        'app',
+        'dev/theme',
+        'dev/app',
+        'dev/dev',
         {
           type: 'category',
           label: 'Ajax',
-          items: ['ajax-mini_cart'],
+          items: ['dev/ajax-mini_cart'],
         },
         {
           type: 'category',
           label: 'Template',
-          items: ['alternative-template', 'layout-tricks'],
+          items: ['dev/alternative-template', 'dev/layout-tricks'],
         },
         {
           type: 'category',
           label: 'Cart',
-          items: ['cart-mini_cart'],
+          items: ['dev/cart-mini_cart'],
         },
         {
           type: 'category',
@@ -40,7 +56,7 @@ module.exports = {
             {
               type: 'category',
               label: 'Variant',
-              items: ['product-variant-add', 'product-variant-show-in-front', 'product-variant-exploded'],
+              items: ['dev/product-variant-add', 'dev/product-variant-show-in-front', 'dev/product-variant-exploded'],
             }
           ],
         },
@@ -51,7 +67,7 @@ module.exports = {
             {
               type: 'category',
               label: 'Import',
-              items: ['customer-import'],
+              items: ['dev/customer-import'],
             }
           ],
         }
@@ -64,7 +80,7 @@ module.exports = {
         {
           type: 'category',
           label: 'Excelify',
-          items: ['magento'],
+          items: ['dev/magento'],
         },
       ]
     }
