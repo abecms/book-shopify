@@ -1,16 +1,69 @@
----
-title: Exploded Variant
-sidebar_label: Exploded Variant
----
+# Product
 
+## Table of contents
+- [Product](#product)
+  - [Table of contents](#table-of-contents)
+  - [Display product media](#display-product-media)
+  - [Show Variant In Front](#show-variant-in-front)
+  - [Exploded Variant](#exploded-variant)
+    - [Create the JavaScript file](#create-the-javascript-file)
+    - [Update the layout file](#update-the-layout-file)
+    - [Create a custom liquid file](#create-a-custom-liquid-file)
+    - [How to use it](#how-to-use-it)
+
+## Display product media
+
+1. In your product template:
+```
+{% for media in product.media %}
+   {% include 'media' %}
+{% endfor %}
+```
+2. Create a media snippet :
+```
+{% case media.media_type %}
+      {% when 'image' %}
+      {% when 'external_video' %}
+        <div class="product-single__media" style="padding-top: {{ 1 | divided_by: media.aspect_ratio | times: 100}}%;" data-media-id="{{ media.id }}">
+          {{ media | external_video_tag }}
+        </div>
+      {% when 'video' %}
+        <div class="product-single__media" data-media-id="{{ media.id }}">
+          {{ media | video_tag: controls: true }}
+        </div>
+      {% when 'model' %}
+        <div class="product-single__media" style="padding-top: 100%" data-media-id="{{ media.id }}">
+          {{ media | model_viewer_tag }}
+        </div>
+      {% else %}
+        <div class="product-single__media" style="padding-top: 100%;" data-media-id="{{ media.id }}">
+          {{ media | media_tag }}
+        </div>
+{% endcase %}
+```
+
+## Show Variant In Front
+* In your Shopify workspace go to `templates`
+* Put this code inside a product form
+  ```html
+    <!-- Variants Selector -->
+    <select name="id">
+      {% for variant in product.variants %}
+        <option value="{{ variant.id }}">{{ variant.title }}</option>
+      {% endfor %}
+    </select>
+    <!-- /Variants Selector -->
+  ```
+* This will show a select of all possible variant
+  - E.g.
+    - red/xs
+    - red/s
+    - red/m
+
+## Exploded Variant
 *In the case you want to separate variants in front*
 
-# Table of contents
-1. [Create the JavaScript file](#create-the-javascript-file)
-2. [Update the layout file](#update-the-layout-file)
-3. [How to use it](#how-to-use-it)
-
-# Create the JavaScript file
+### Create the JavaScript file
 
 * In your Shopify workspace go to `assets`
 * Edit an existing `.js` file or create it *e.g (`swatch.js`)
@@ -29,7 +82,7 @@ sidebar_label: Exploded Variant
 
   /** Class representing a swatch. */
   ShpCustom.Swatch = class {
-    
+
     /**
      * Create a swatch.
      * @param {string} id - The id of the form.
@@ -60,7 +113,7 @@ sidebar_label: Exploded Variant
       $(`${this.id} .selector-wrapper`).hide();
 
       clearTimeout(this.sizeAlertTimeout);
-    
+
       $(`${this.id} .swatch :radio`).change(function() {
         var optionIndex = $(this).closest('.swatch').attr('data-option-index');
         var optionValue = $(this).val();
@@ -92,17 +145,17 @@ sidebar_label: Exploded Variant
   }
 ```
 
-# Update the layout file
+### Update the layout file
 
 * In your Shopify workspace go to `layout`
 * Open the `theme.liquid` file
-* At the bottom of the file before the `</body>` add 
-  ```html 
+* At the bottom of the file before the `</body>` add
+  ```html
     <script src="{{ 'name_of_your_file.js' | asset_url }}" defer="defer"></script>
   ```
 * Save your file
 
-# Create a custom liquid file
+### Create a custom liquid file
 * In your Shopify workspace go to `snippets`
 * Create a file named `swatch.liquid`
 * Add the following code inside and *do some modifications/customization*
@@ -114,7 +167,7 @@ sidebar_label: Exploded Variant
       {% assign downcased_option = option.name | escape | downcase %}
 
         {% if selectedOptionToDisplay == downcased_option %}
-        
+
           {% if downcased_option == 'size' %}
             <div class="size-numbers">
               <h6 class="size__title">
@@ -132,7 +185,7 @@ sidebar_label: Exploded Variant
               {% endif %}
               <div class="colors__inner">
           {% endif %}
-          
+
                 <div id="{{uniqId}}-option-{{ forloop.index0 }}" class="swatch" data-option-index="{{ forloop.index0 }}">
                   {% for value in option.values %}
 
@@ -154,21 +207,21 @@ sidebar_label: Exploded Variant
                       style="display: none">
 
                     {% if downcased_option == 'color' %}
-                      <label 
-                        class="color color--{{ value | escape | downcase }}" 
+                      <label
+                        class="color color--{{ value | escape | downcase }}"
                         for="{{uniqId}}-option-{{ option.name | handleize }}-{{ value | escape }}">
                         <div class="color__btn"></div>
                       </label>
                     {% endif %}
 
                     {% if downcased_option == 'size' %}
-                      <label 
-                        class="size {% unless variant_label_state %}size--unavailable {% endunless %}" 
+                      <label
+                        class="size {% unless variant_label_state %}size--unavailable {% endunless %}"
                         for="{{uniqId}}-option-{{ option.name | handleize }}-{{ value | escape }}">
                         {{ value }}
                       </label>
                     {% endif %}
-                  {% endfor %}              
+                  {% endfor %}
                 </div>
 
           {% if downcased_option == 'size' or downcased_option == 'color' %}
@@ -181,7 +234,7 @@ sidebar_label: Exploded Variant
   {% endunless %}
 ```
 
-# How to use it
+### How to use it
 *E.g. use it on a product page*
 
 * In your Shopify workspace go to your liquid product page

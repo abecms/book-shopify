@@ -154,36 +154,52 @@ Dynamically making a background image is not easy. Here is the trick to make it 
 In this example of a liquid section, you see that we define a style depending on the screen size and apply it to the class ```intro```.
 
 
-## Product
+## Alternative Template
 
-Display the corresponding media on your product page :
-1. In your product template:
+The alternative templates allow the declination of main templates in order to :
+- Be able to lighten the code for an Ajax request
+- Inject a new template
+- And many more choice
+
+Syntax: `default_template_name.*.liquid`
+
+E.g.
+
+`product.liquid`
+```html
+  <div class="product-page">
+    <h1>
+      Pincipal template
+    </h1>
+    <p>Template description</p>
+    <div class="more-product-info">
+      More Product Info
+    </div>
+  </div>
 ```
-{% for media in product.media %}
-   {% include 'media' %}
-{% endfor %}
+
+`product.list.liquid`
+```html
+  <div class="product-list-page">
+    <h1>
+      Alternative template
+    </h1>
+    <ul>
+      <li>Product 1</li>
+      <li>Product 2</li>
+      <li>Product 3</li>
+    </ul>
+  </div>
 ```
-2. Create a media snippet :
-```
-{% case media.media_type %}
-      {% when 'image' %}
-      {% when 'external_video' %}
-        <div class="product-single__media" style="padding-top: {{ 1 | divided_by: media.aspect_ratio | times: 100}}%;" data-media-id="{{ media.id }}">
-          {{ media | external_video_tag }}
-        </div>
-      {% when 'video' %}
-        <div class="product-single__media" data-media-id="{{ media.id }}">
-          {{ media | video_tag: controls: true }}
-        </div>
-      {% when 'model' %}
-        <div class="product-single__media" style="padding-top: 100%" data-media-id="{{ media.id }}">
-          {{ media | model_viewer_tag }}
-        </div>
-      {% else %}
-        <div class="product-single__media" style="padding-top: 100%;" data-media-id="{{ media.id }}">
-          {{ media | media_tag }}
-        </div>
-{% endcase %}
+
+`product.preview.liquid`
+```html
+  <div class="product-preview">
+    <h1>
+      Alternative template
+    </h1>
+    <p>Template description</p>
+  </div>
 ```
 
 ## Newsletter Section
@@ -397,7 +413,7 @@ You'll use these labels in your liquid templates:
 ```{{footer_client_description | newline_to_br}}```
 
 ## Pour afficher un complément d'information
-- dans le settings de la section ajouter une ligne info 
+- dans le settings de la section ajouter une ligne info
 ```"info": "Texte que l'on veut afficher"```
 
 ## Afficher le titre d'un menu dans un template
@@ -423,32 +439,33 @@ Below is the code you would enter in the additional content & scripts of then se
 </script>
 ```
 
-## Ajouter un produit automatiquement au panier
+## Layout Tricks
 
-Dans l'exemple, on vérifie que le produit n'est pas déjà dans le panier et que le montant du panier est > 100 (il est calculé en cents)
+### Layout None
+Syntax: `{% layout none %}`
 
+Description: Give you the possibility to render a template without layout (ideal to create a json result as for creatong a search JSON feature)
+
+E.g.:
+```html
+  {% layout none %}
+  <div class="product-preview">
+    <h1>
+      Alternative template
+    </h1>
+    <p>Template description</p>
+  </div>
 ```
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-{% assign found_title = false %}
-{% for item in checkout.line_items %}
-  {% if item.variant.id == 7387208286253 %}
-    {% assign found_title = true %}
-  {% endif %}
-{% endfor %}
 
-{% if checkout.subtotal_price > 10000 and found_title == false %}
-<script>
-  $( document ).ready(function() {
-      var variantId = 7387208286253;
-      jQuery.post('/cart/add.js', {
-        quantity: 1,
-        id: variantId
-      });
-      setTimeout(
-        function() {
-          window.location.reload(true);
-        }, 1000);
-  });
-</script>
-{% endif %}
-```
+## Ajax API
+
+### Recommandations
+https://shopify.dev/docs/themes/liquid/reference/objects/recommendations
+
+### Predictive search / autocomplete
+https://shopify.dev/tutorials/add-predictive-search-to-your-shopify-theme
+
+### interact with cart on the frontend / minicart
+https://github.com/Shopify/theme-scripts/blob/master/packages/theme-cart/README.md
+
+
