@@ -8,7 +8,9 @@ sidebar_label: Exploded Variant
 # Table of contents
 1. [Create the JavaScript file](#create-the-javascript-file)
 2. [Update the layout file](#update-the-layout-file)
-3. [How to use it](#how-to-use-it)
+3. [Create a custom liquid file (swatch)](#create-a-custom-liquid-file-swatch)
+4. [Create a custom liquid file (variant)](#create-a-custom-liquid-file-variant)
+5. [How to use it](#how-to-use-it)
 
 # Create the JavaScript file
 
@@ -18,78 +20,94 @@ sidebar_label: Exploded Variant
 * Save your file
 
 ```javascript
-  **
-  * -------------------------
-  * Swatch
-  * -------------------------
-  */
+  /**
+   * -------------------------
+   * ShpCustom: Swatch
+   * -------------------------
+   */
+
   // If You don't already have a custom global object created
   // e.g ShpCustom can be what ever you want
   window.ShpCustom = window.ShpCustom || {cart: {}};
 
-  /** Class representing a swatch. */
-  ShpCustom.Swatch = class {
-    
-    /**
-     * Create a swatch.
-     * @param {string} id - The id of the form.
-     * @param {string} variantSelectId - The variant select id.
-     * @param {object} product - The product object.
-     */
-    constructor(id, variantSelectId, product) {
-      this.product = product;
-      this.sizeAlertTimeout;
-      this.id = `#${id}`;
-      this.variantSelectId = `${variantSelectId}`;
+  (function() {
+    ShpCustom.Swatch = class {
+      constructor(id, variantSelectId, product) {
+        this.product = product;
+        this.sizeAlertTimeout;
+        this.id = `#${id}`;
+        this.variantSelectId = `${variantSelectId}`;
 
-      this.$addToCart = $(`${this.id} .js-add-to-cart`);
-      this.init();
-    }
+        this.$sizeAlert = $(`${this.id} .size__alert`);
+        this.$addToCart = $(`${this.id} .js-add-to-cart`);
+        this.init();
+      }
 
-    /**
-     * Init the class
-     */
-    init() {
-      new Shopify.OptionSelectors(this.variantSelectId, {
-        product: this.product,
-        onVariantSelected: (variant, selector) => {
-          this.selectCallback(variant, selector);
-        }
-      });
+      init() {
+        new Shopify.OptionSelectors(this.variantSelectId, {
+          product: this.product,
+          onVariantSelected: (variant, selector) => {
+            this.selectCallback(variant, selector);
+          }
+        });
 
-      $(`${this.id} .selector-wrapper`).hide();
+        $(`${this.id} .selector-wrapper`).hide();
 
-      clearTimeout(this.sizeAlertTimeout);
-    
-      $(`${this.id} .swatch :radio`).change(function() {
-        var optionIndex = $(this).closest('.swatch').attr('data-option-index');
-        var optionValue = $(this).val();
-        $(this)
+        clearTimeout(this.sizeAlertTimeout);
+      
+        $(`${this.id} .swatch :radio`).change(this.handleChange);
+
+        // In case you want to link it with add to cart function
+        $(this.id).submit(this.handleSubmit)
+      }
+
+      handleChange(event) {
+        var optionIndex = $(event.target).closest('.swatch').attr('data-option-index');
+        var optionValue = $(event.target).val();
+        $(event.target)
           .closest('form')
           .find('.single-option-selector')
           .eq(optionIndex)
           .val(optionValue)
           .trigger('change');
-      });
-    }
+      }
 
-    /**
-     * Callback after a variant change
-     * @param {variant} object The return variant object
-     */
-    selectCallback(variant) {
-      this.$sizeAlert.hide();
-      if (variant) {
-        if (variant.available) {
-          this.$addToCart.removeAttr('disabled');
+      handleSubmit(event) {
+        event.preventDefault();
+      
+        const $submitButton = $(this.id).find('.js-add-to-cart');
+      
+        $submitButton.attr('disabled', 'disabled');
+        ShpCustom.Cart.addItemFromForm($(this.id).serialize(), () => {
+          $submitButton.removeAttr('disabled');
+        });
+      }
+
+      showAlert() {
+        if (this.$sizeAlert) {
+          this.$sizeAlert.show();
+          this.sizeAlertTimeout = setTimeout(() => {
+            this.$sizeAlert.hide();
+          }, 3000);
+        }
+      }
+
+      selectCallback(variant) {
+        this.$sizeAlert.hide();
+        if (variant) {
+          if (variant.available) {
+            this.$addToCart.removeAttr('disabled');
+          } else {
+            this.$addToCart.attr('disabled', 'disabled');
+            this.showAlert();
+          }
         } else {
           this.$addToCart.attr('disabled', 'disabled');
+          this.showAlert();
         }
-      } else {
-        this.$addToCart.attr('disabled', 'disabled');
-      }
-    };
-  }
+      };
+    }
+  })();
 ```
 
 # Update the layout file
@@ -102,7 +120,7 @@ sidebar_label: Exploded Variant
   ```
 * Save your file
 
-# Create a custom liquid file
+# Create a custom liquid file (swatch)
 * In your Shopify workspace go to `snippets`
 * Create a file named `swatch.liquid`
 * Add the following code inside and *do some modifications/customization*
@@ -111,6 +129,7 @@ sidebar_label: Exploded Variant
   {% assign selectedOptionToDisplay = option | escape | downcase %}
   {% unless product.has_only_default_variant %}
     {% for option in product.options_with_values %}
+    
       {% assign downcased_option = option.name | escape | downcase %}
 
         {% if selectedOptionToDisplay == downcased_option %}
@@ -133,7 +152,7 @@ sidebar_label: Exploded Variant
               <div class="colors__inner">
           {% endif %}
           
-                <div id="{{uniqId}}-option-{{ forloop.index0 }}" class="swatch" data-option-index="{{ forloop.index0 }}">
+                <div class="swatch" class="swatch" data-option-index="{{ forloop.index0 }}">
                   {% for value in option.values %}
 
                     {% assign variant_label_state = true %}
@@ -145,34 +164,38 @@ sidebar_label: Exploded Variant
                     {% endif %}
 
                     <input type="radio"
-                      {% if option.selected_value == value %} checked="checked"{% endif %}
+                      class="hidden"
+                      {% if forloop.index0 == 0 %} checked="checked"{% endif %}
                       {% unless variant_label_state %} disabled="disabled"{% endunless %}
                       value="{{ value | escape }}"
                       data-index="option{{ forloop.index }}"
                       name="{{ option.name | handleize }}"
-                      id="{{uniqId}}-option-{{ option.name | handleize }}-{{ value | escape }}"
-                      style="display: none">
-
+                      data-js-swatch-input>
                     {% if downcased_option == 'color' %}
                       <label 
                         class="color color--{{ value | escape | downcase }}" 
-                        for="{{uniqId}}-option-{{ option.name | handleize }}-{{ value | escape }}">
+                        data-js-swatch-label>
                         <div class="color__btn"></div>
                       </label>
                     {% endif %}
-
                     {% if downcased_option == 'size' %}
                       <label 
-                        class="size {% unless variant_label_state %}size--unavailable {% endunless %}" 
-                        for="{{uniqId}}-option-{{ option.name | handleize }}-{{ value | escape }}">
+                        class="size {% unless variant_label_state %}size--unavailable {% endunless %}"
+                        data-js-swatch-label>
                         {{ value }}
                       </label>
                     {% endif %}
-                  {% endfor %}              
-                </div>
+                  {% endfor %}              </div>
 
           {% if downcased_option == 'size' or downcased_option == 'color' %}
               </div>
+              {% if downcased_option == 'size'and activeSizeAlert %}
+                <div class="size__alert hidden">
+                  <p>
+                    {{ 'general.product.size_alert' | t }}
+                  </p>
+                </div>
+              {% endif %} 
             </div>
           {% endif %}
 
@@ -181,33 +204,34 @@ sidebar_label: Exploded Variant
   {% endunless %}
 ```
 
+# Create a custom liquid file (variant)
+* In your Shopify workspace go to `snippets`
+* Create a file named `variant-selector.liquid`
+* Add the following code inside and *do some modifications/customization*
+* Put this code inside
+  ```html
+  <!-- Variants Selector -->
+    <select data-js-variant name="id" class="hidden">
+      {% for item in items %}
+        <option value="{{ item.id }}">{{ item.title }}</option>
+      {% endfor %}
+    </select>
+  <!-- /Variants Selector -->
+  ```
+
+
 # How to use it
 *E.g. use it on a product page*
 
-* In your Shopify workspace go to your liquid product page
-* Put this code inside your product form (As you can see we hide the select and put a custom id)
+* In your Shopify workspace go to your *liquid product page*
+* Customize your Shopify form tag to match this: 
   ```html
-    <!-- Variants Selector -->
-    <select id="put your a custom id here" name="id" style="display:none">
-      {% for variant in product.variants %}
-        <option value="{{ variant.id }}">{{ variant.title }}</option>
-      {% endfor %}
-    </select>
-    <!-- /Variants Selector -->
+    {% form "product", product, data-js-swatch: true, data-handle: product.handle %}
   ```
-* Include your swatch liquid file inside your product form where you want
+* Include your swatch liquid file inside your product *form* where you want
   ```html
-    {% include 'swatch' with option: 'Color', uniqId: uniqId %}
-    {% include 'swatch' with option: 'Size', uniqId: uniqId %}
-  ```
-  *As you can see we pass the variant name and a uniqId*
-* At the end of the file add
-  ```html
-    <script>
-      jQuery(document).ready(function(){
-        new ShpCustom.Swatch('{{uniqId}}', '{{variantSelectId}}', {{ product | json}});
-      })
-    </script>
+    {% include 'swatch' with option: 'Color' %}
+    {% include 'swatch' with option: 'Size' %}
   ```
 * Don't forget to add class to :
   - **Add To Cart Button** `js-add-to-cart`

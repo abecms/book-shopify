@@ -11,8 +11,8 @@ sidebar_label: Mini Cart
 
 # Create the Liquid file
 
-* Go to [Mini Cart - Create the Liquid file](/docs/cart-mini_cart#create-the-liquid-file)
-* At the beginning of the `cart.mini.liquid` add this line ``{% layout none %}`` (For more explanation go to [Layout Tricks](/docs/layout-tricks))
+* Go to [Mini Cart - Create the Liquid file](/docs/dev/cart-mini_cart#create-the-liquid-file)
+* At the beginning of the `cart.mini.liquid` add this line ``{% layout none %}`` (For more explanation go to [Layout Tricks](/docs/dev/layout-tricks))
 
 # Create the JavaScript file
 
@@ -23,37 +23,25 @@ sidebar_label: Mini Cart
 
 ```javascript
 /**
- * -------------------------
- * Ajax Cart
- * -------------------------
- */
+   * -------------------------
+   * ShpCustom: Ajax Cart
+   * -------------------------
+   */
 
 // If You don't already have a custom global object created
 // e.g ShpCustom can be what ever you want
 window.ShpCustom = window.ShpCustom || {cart: {}};
 
 (function() {
-
-  /* 
-    * This callback is called after an item has been added to the cart.
-    * @callback onItemAdded
-    */
   ShpCustom.Cart.onItemAdded = function() {
     ShpCustom.Cart.getCart();
   };
 
-  /* 
-    * This callback is called after an request failure
-    * @callback onError
-    * @param {object} XMLHttpRequest
-    */
-  ShpCustom.Cart.onError = function(XMLHttpRequest) {
+  ShpCustom.Cart.onError = function(XMLHttpRequest, textStatus) {
     var data = eval('(' + XMLHttpRequest.responseText.description + ')');
     alert(data);
   };
 
-  /** @function
-    * @name getCart */
   ShpCustom.Cart.getCart = function() { 
     var params = {
       type: 'GET',
@@ -61,7 +49,6 @@ window.ShpCustom = window.ShpCustom || {cart: {}};
       success: function(line_html) {
         if(line_html) {
           const $line_html = $(line_html);
-
           // Get number of item in cart 
           const cartUpdateCount = $line_html.find('Put your ItemCount element class or Id e.g. .js-cart-update-count').text();
 
@@ -79,10 +66,6 @@ window.ShpCustom = window.ShpCustom || {cart: {}};
     $.ajax(params);
   };
 
-  /** @function
-    * @name addItemFromForm
-    * @param {object} data
-    * @param {Function} callback */
   ShpCustom.Cart.addItemFromForm = function(data, callback) {
     var params = {
       type: 'POST',

@@ -10,7 +10,7 @@ sidebar_label: Mini Cart
 # Create the Liquid file
 
 * In your Shopify workspace go to `templates`
-* Create a liquid file name `cart.mini.liquid` (For more explanation go to [Alternative Template](/docs/alternative-template))
+* Create a liquid file name `cart.mini.liquid` (For more explanation go to [Alternative Template](/docs/dev/alternative-template))
 * Put your Mini Cart HTML code (or include it *e.g.``{% include 'cp-quick_cart_inner' %}``*) inside the file
 * Save your file
 
@@ -77,7 +77,7 @@ sidebar_label: Mini Cart
 ```
 
 > Why not just include `cp-quick_cart.liquid` inside `cart.mini.liquid` ?
-> In this example we separate the inner cart and the pop up container in the case of updating mini cart by ajax see [Ajax Mini Cart](/docs/ajax-mini_cart)
+> In this example we separate the inner cart and the pop up container in the case of updating mini cart by ajax see [Ajax Mini Cart](/docs/dev/ajax-mini_cart)
 
 # Add payment button
 
