@@ -1,18 +1,73 @@
 ---
-title: Exploded Variant
-sidebar_label: Exploded Variant
+id : product
+titre : Product
+sidebar_label : Product
 ---
 
+## Table of contents
+- [Product](#product)
+  - [Table of contents](#table-of-contents)
+  - [Display product media](#display-product-media)
+  - [Show Variant In Front](#show-variant-in-front)
+  - [Exploded Variant](#exploded-variant)
+    - [Create the JavaScript file](#create-the-javascript-file)
+    - [Update the layout file](#update-the-layout-file)
+    - [Create a custom liquid file](#create-a-custom-liquid-file)
+    - [How to use it](#how-to-use-it)
+
+## Display product media
+
+1. In your product template:
+```
+{% for media in product.media %}
+   {% include 'media' %}
+{% endfor %}
+```
+2. Create a media snippet :
+```
+{% case media.media_type %}
+      {% when 'image' %}
+      {% when 'external_video' %}
+        <div class="product-single__media" style="padding-top: {{ 1 | divided_by: media.aspect_ratio | times: 100}}%;" data-media-id="{{ media.id }}">
+          {{ media | external_video_tag }}
+        </div>
+      {% when 'video' %}
+        <div class="product-single__media" data-media-id="{{ media.id }}">
+          {{ media | video_tag: controls: true }}
+        </div>
+      {% when 'model' %}
+        <div class="product-single__media" style="padding-top: 100%" data-media-id="{{ media.id }}">
+          {{ media | model_viewer_tag }}
+        </div>
+      {% else %}
+        <div class="product-single__media" style="padding-top: 100%;" data-media-id="{{ media.id }}">
+          {{ media | media_tag }}
+        </div>
+{% endcase %}
+```
+
+## Show Variant In Front
+* In your Shopify workspace go to `templates`
+* Put this code inside a product form
+  ```html
+    <!-- Variants Selector -->
+    <select name="id">
+      {% for variant in product.variants %}
+        <option value="{{ variant.id }}">{{ variant.title }}</option>
+      {% endfor %}
+    </select>
+    <!-- /Variants Selector -->
+  ```
+* This will show a select of all possible variant
+  - E.g.
+    - red/xs
+    - red/s
+    - red/m
+
+## Exploded Variant
 *In the case you want to separate variants in front*
 
-# Table of contents
-1. [Create the JavaScript file](#create-the-javascript-file)
-2. [Update the layout file](#update-the-layout-file)
-3. [Create a custom liquid file (swatch)](#create-a-custom-liquid-file-swatch)
-4. [Create a custom liquid file (variant)](#create-a-custom-liquid-file-variant)
-5. [How to use it](#how-to-use-it)
-
-# Create the JavaScript file
+### Create the JavaScript file
 
 * In your Shopify workspace go to `assets`
 * Edit an existing `.js` file or create it *e.g (`swatch.js`)
@@ -32,6 +87,13 @@ sidebar_label: Exploded Variant
 
   (function() {
     ShpCustom.Swatch = class {
+
+      /**
+       * Create a swatch.
+       * @param {string} id - The id of the form.
+       * @param {string} variantSelectId - The variant select id.
+       * @param {object} product - The product object.
+       */
       constructor(id, variantSelectId, product) {
         this.product = product;
         this.sizeAlertTimeout;
@@ -110,12 +172,12 @@ sidebar_label: Exploded Variant
   })();
 ```
 
-# Update the layout file
+### Update the layout file
 
 * In your Shopify workspace go to `layout`
 * Open the `theme.liquid` file
-* At the bottom of the file before the `</body>` add 
-  ```html 
+* At the bottom of the file before the `</body>` add
+  ```html
     <script src="{{ 'name_of_your_file.js' | asset_url }}" defer="defer"></script>
   ```
 * Save your file
@@ -133,7 +195,7 @@ sidebar_label: Exploded Variant
       {% assign downcased_option = option.name | escape | downcase %}
 
         {% if selectedOptionToDisplay == downcased_option %}
-        
+
           {% if downcased_option == 'size' %}
             <div class="size-numbers">
               <h6 class="size__title">
