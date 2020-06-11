@@ -24,4 +24,4 @@ Une fois que l'import a été effectué
 
 # Template
 Le template de la page d'activation de compte peut être personnalisé. Il se trouve dans customers/activate_account.liquid
-Référence : https://shopify.dev/docs/themes/files/customers-activate-account-liquid
+Référence : https://shopify.dev/docs/themes/files/customers-activate-account-liquid 
