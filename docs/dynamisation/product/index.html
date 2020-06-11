@@ -16,23 +16,23 @@
 <link rel="stylesheet" href="/styles.b62b95ac.css">
 
 
-<link rel="preload" href="/styles.4a2f14a4.js" as="script">
+<link rel="preload" href="/styles.0f03e507.js" as="script">
 
-<link rel="preload" href="/runtime~main.5facc21b.js" as="script">
+<link rel="preload" href="/runtime~main.2e2e4150.js" as="script">
 
-<link rel="preload" href="/main.fa7d8009.js" as="script">
+<link rel="preload" href="/main.04da3702.js" as="script">
 
-<link rel="preload" href="/1.fef3231c.js" as="script">
+<link rel="preload" href="/1.c3d1df62.js" as="script">
 
-<link rel="preload" href="/2.80dbf3d0.js" as="script">
+<link rel="preload" href="/2.66aa4f12.js" as="script">
 
-<link rel="preload" href="/25.f5c7599b.js" as="script">
+<link rel="preload" href="/26.3ac990ef.js" as="script">
 
 <link rel="preload" href="/20ac7829.be3f071e.js" as="script">
 
-<link rel="preload" href="/17896441.aadde835.js" as="script">
+<link rel="preload" href="/17896441.5ea42c67.js" as="script">
 
-<link rel="preload" href="/1fac1281.bd5367f0.js" as="script">
+<link rel="preload" href="/1fac1281.5f5c0c2c.js" as="script">
 
 </head>
 <body>
@@ -61,23 +61,23 @@
 </span></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">        {% endif %}</span></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">    {% endfor %}</span></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">  {% endunless %}</span></div></code></pre></div><h1><a aria-hidden="true" tabindex="-1" class="anchor enhancedAnchor_ZqCz" id="create-a-custom-liquid-file-variant"></a><a aria-hidden="true" tabindex="-1" class="hash-link" href="#create-a-custom-liquid-file-variant" title="Direct link to heading">#</a>Create a custom liquid file (variant)</h1><ul><li>In your Shopify workspace go to <code>snippets</code></li><li>Create a file named <code>variant-selector.liquid</code></li><li>Add the following code inside and <em>do some modifications/customization</em></li><li>Put this code inside<div class="mdxCodeBlock_iHAB"><pre class="prism-code language-html codeBlock_19pQ"><button type="button" aria-label="Copy code to clipboard" class="copyButton_1BYj">Copy</button><code class="codeBlockLines_2n9r" style="color:#bfc7d5;background-color:#292d3e"><div class="token-line" style="color:#bfc7d5"><span class="token comment" style="color:rgb(105, 112, 152);font-style:italic">&lt;!-- Variants Selector --&gt;</span><span class="token plain"></span></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token tag punctuation" style="color:rgb(199, 146, 234)">&lt;</span><span class="token tag" style="color:rgb(255, 85, 114)">select</span><span class="token tag" style="color:rgb(255, 85, 114)"> </span><span class="token tag attr-name" style="color:rgb(255, 203, 107)">data-js-variant</span><span class="token tag" style="color:rgb(255, 85, 114)"> </span><span class="token tag attr-name" style="color:rgb(255, 203, 107)">name</span><span class="token tag attr-value punctuation" style="color:rgb(199, 146, 234)">=</span><span class="token tag attr-value punctuation" style="color:rgb(199, 146, 234)">&quot;</span><span class="token tag attr-value" style="color:rgb(255, 85, 114)">id</span><span class="token tag attr-value punctuation" style="color:rgb(199, 146, 234)">&quot;</span><span class="token tag" style="color:rgb(255, 85, 114)"> </span><span class="token tag attr-name" style="color:rgb(255, 203, 107)">class</span><span class="token tag attr-value punctuation" style="color:rgb(199, 146, 234)">=</span><span class="token tag attr-value punctuation" style="color:rgb(199, 146, 234)">&quot;</span><span class="token tag attr-value" style="color:rgb(255, 85, 114)">hidden</span><span class="token tag attr-value punctuation" style="color:rgb(199, 146, 234)">&quot;</span><span class="token tag punctuation" style="color:rgb(199, 146, 234)">&gt;</span><span class="token plain"></span></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">    {% for item in items %}</span></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">      </span><span class="token tag punctuation" style="color:rgb(199, 146, 234)">&lt;</span><span class="token tag" style="color:rgb(255, 85, 114)">option</span><span class="token tag" style="color:rgb(255, 85, 114)"> </span><span class="token tag attr-name" style="color:rgb(255, 203, 107)">value</span><span class="token tag attr-value punctuation" style="color:rgb(199, 146, 234)">=</span><span class="token tag attr-value punctuation" style="color:rgb(199, 146, 234)">&quot;</span><span class="token tag attr-value" style="color:rgb(255, 85, 114)">{{ item.id }}</span><span class="token tag attr-value punctuation" style="color:rgb(199, 146, 234)">&quot;</span><span class="token tag punctuation" style="color:rgb(199, 146, 234)">&gt;</span><span class="token plain">{{ item.title }}</span><span class="token tag punctuation" style="color:rgb(199, 146, 234)">&lt;/</span><span class="token tag" style="color:rgb(255, 85, 114)">option</span><span class="token tag punctuation" style="color:rgb(199, 146, 234)">&gt;</span><span class="token plain"></span></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">    {% endfor %}</span></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">  </span><span class="token tag punctuation" style="color:rgb(199, 146, 234)">&lt;/</span><span class="token tag" style="color:rgb(255, 85, 114)">select</span><span class="token tag punctuation" style="color:rgb(199, 146, 234)">&gt;</span><span class="token plain"></span></div><div class="token-line" style="color:#bfc7d5"><span class="token plain"></span><span class="token comment" style="color:rgb(105, 112, 152);font-style:italic">&lt;!-- /Variants Selector --&gt;</span></div></code></pre></div></li></ul><h1><a aria-hidden="true" tabindex="-1" class="anchor enhancedAnchor_ZqCz" id="how-to-use-it"></a><a aria-hidden="true" tabindex="-1" class="hash-link" href="#how-to-use-it" title="Direct link to heading">#</a>How to use it</h1><p><em>E.g. use it on a product page</em></p><ul><li>In your Shopify workspace go to your <em>liquid product page</em></li><li>Customize your Shopify form tag to match this: <div class="mdxCodeBlock_iHAB"><pre class="prism-code language-html codeBlock_19pQ"><button type="button" aria-label="Copy code to clipboard" class="copyButton_1BYj">Copy</button><code class="codeBlockLines_2n9r" style="color:#bfc7d5;background-color:#292d3e"><div class="token-line" style="color:#bfc7d5"><span class="token plain">{% form &quot;product&quot;, product, data-js-swatch: true, data-handle: product.handle %}</span></div></code></pre></div></li><li>Include your swatch liquid file inside your product <em>form</em> where you want<div class="mdxCodeBlock_iHAB"><pre class="prism-code language-html codeBlock_19pQ"><button type="button" aria-label="Copy code to clipboard" class="copyButton_1BYj">Copy</button><code class="codeBlockLines_2n9r" style="color:#bfc7d5;background-color:#292d3e"><div class="token-line" style="color:#bfc7d5"><span class="token plain">{% include &#x27;swatch&#x27; with option: &#x27;Color&#x27; %}</span></div><div class="token-line" style="color:#bfc7d5"><span class="token plain">  {% include &#x27;swatch&#x27; with option: &#x27;Size&#x27; %}</span></div></code></pre></div></li><li>Don&#x27;t forget to add class to :<ul><li><strong>Add To Cart Button</strong> <code>js-add-to-cart</code></li></ul></li></ul></div></article><div class="margin-vert--lg"><nav class="pagination-nav"><div class="pagination-nav__item"><a class="pagination-nav__link" href="/docs/dynamisation/theme"><h5 class="pagination-nav__link--sublabel">Previous</h5><h4 class="pagination-nav__link--label">« theme</h4></a></div><div class="pagination-nav__item pagination-nav__item--next"><a class="pagination-nav__link" href="/docs/dynamisation/search"><h5 class="pagination-nav__link--sublabel">Next</h5><h4 class="pagination-nav__link--label">search »</h4></a></div></nav></div></div></div><div class="col col--3"><div class="tableOfContents_TbNY"><ul class="contents contents__left-border"><li><a href="#table-of-contents" class="contents__link">Table of contents</a></li><li><a href="#display-product-media" class="contents__link">Display product media</a></li><li><a href="#show-variant-in-front" class="contents__link">Show Variant In Front</a></li><li><a href="#exploded-variant" class="contents__link">Exploded Variant</a><ul><li><a href="#create-the-javascript-file" class="contents__link">Create the JavaScript file</a></li><li><a href="#update-the-layout-file" class="contents__link">Update the layout file</a></li></ul></li></ul></div></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container"><div class="row footer__links"><div class="col footer__col"><h4 class="footer__title">Docs</h4><ul class="footer__items"><li class="footer__item"><a class="footer__link-item" href="/docs/introduction">Docs</a></li></ul></div><div class="col footer__col"><h4 class="footer__title">Community</h4><ul class="footer__items"><li class="footer__item"><a class="footer__link-item" target="_blank" rel="noopener noreferrer" href="https://abecms.slack.com">Slack</a></li></ul></div><div class="col footer__col"><h4 class="footer__title">Website</h4><ul class="footer__items"><li class="footer__item"><a class="footer__link-item" target="_blank" rel="noopener noreferrer" href="https://livingcolor.fr">Website</a></li></ul></div></div><div class="text--center"><div class="margin-bottom--sm"><a href="https://opensource.facebook.com/" target="_blank" rel="noopener noreferrer" class="footerLogoLink_1Wg7"><img class="footer__logo" alt="Facebook Open Source Logo" src="https://docusaurus.io/img/oss_logo.png"></a></div>Copyright © 2020 Abe SAS. Built with Docusaurus.</div></div></footer>
 </div>
 
-<script src="/styles.4a2f14a4.js"></script>
+<script src="/styles.0f03e507.js"></script>
 
-<script src="/runtime~main.5facc21b.js"></script>
+<script src="/runtime~main.2e2e4150.js"></script>
 
-<script src="/main.fa7d8009.js"></script>
+<script src="/main.04da3702.js"></script>
 
-<script src="/1.fef3231c.js"></script>
+<script src="/1.c3d1df62.js"></script>
 
-<script src="/2.80dbf3d0.js"></script>
+<script src="/2.66aa4f12.js"></script>
 
-<script src="/25.f5c7599b.js"></script>
+<script src="/26.3ac990ef.js"></script>
 
 <script src="/20ac7829.be3f071e.js"></script>
 
-<script src="/17896441.aadde835.js"></script>
+<script src="/17896441.5ea42c67.js"></script>
 
-<script src="/1fac1281.bd5367f0.js"></script>
+<script src="/1fac1281.5f5c0c2c.js"></script>
 
 
 </body>
