@@ -33,6 +33,7 @@ module.exports = {
       items: [
         'dev/app',
         'dev/dev',
+        'dev/graphql',
         {
           type: 'category',
           label: 'Customer',
