@@ -26,6 +26,25 @@ When you create a page based on stickers, you :
 
 | CAUTION : Your assets directory can't have subdirectories, nor the other folders ! (no /images subdirectory, not /fonts etc...
 
+## Customize your theme settings
+You can use the `settings_schema.json` file to configure the theme settings that merchants can access using the theme editor. A merchant accesses the editor by clicking Customize from the Themes page of their Shopify admin.
+
+Ref : https://shopify.dev/docs/themes/settings
+
+If you can use the values from your theme settings in your Liquid templates, CSS, and JavaScript files.
+For exemple with the followings setting :
+
+```
+{
+  "type":      "text",
+  "id":        "tagline",
+  "label":     "Your company tagline",
+  "default":   "So fresh, so clean!",
+  "info":      "Use this field to add a tagline to your shop",
+},
+```
+To display the setting value in the liquid template, use the following format  
+`{{ settings.tagline }}`
 
 
 ### Diffence between section and snippet
