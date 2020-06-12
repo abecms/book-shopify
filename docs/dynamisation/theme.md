@@ -26,7 +26,9 @@ When you create a page based on stickers, you :
 
 | CAUTION : Your assets directory can't have subdirectories, nor the other folders ! (no /images subdirectory, not /fonts etc...
 
-### diffence between section and snippet
+
+
+### Diffence between section and snippet
 Sections divide your page into blocks of content. Snippets are reusable components across the site which can be rendered inside your sections, your templates, or even under your layout.
 
 Think your sections as big functional components while snippets are more little chunks of code composing your sections, templates or layouts.
