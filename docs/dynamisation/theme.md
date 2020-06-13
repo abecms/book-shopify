@@ -46,6 +46,21 @@ For exemple with the followings setting :
 To display the setting value in the liquid template, use the following format  
 `{{ settings.tagline }}`
 
+## Add a favicon
+1. In the `settings_schema.json` add the following lines
+```
+{
+  "name": "Favicon",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "favicon",
+      "label": "Favicon image"
+    }
+  ]
+}
+``` 
+2. Then go to the theme settings of your theme, you can now add an image or browse the library to select one
 
 ### Diffence between section and snippet
 Sections divide your page into blocks of content. Snippets are reusable components across the site which can be rendered inside your sections, your templates, or even under your layout.
