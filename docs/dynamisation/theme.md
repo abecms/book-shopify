@@ -89,6 +89,7 @@ use the ```render```tag :
 ```{{ 'app.css' | asset_url | stylesheet_tag }}```
 
 
+
 ## nested sections
 To incule sections inside sections (taken from https://community.shopify.com/c/Shopify-Design/Nested-Sections/m-p/424873) :
 ```
@@ -107,6 +108,92 @@ To incule sections inside sections (taken from https://community.shopify.com/c/S
 
 {{collection_template_content}}
 ```
+
+## Restricted sections
+If you want to make sections displayed during a sepcific range of date, for everyone, only connected or not connected people :
+
+1. Add a block in your schema, with :
+  - A starting date that indicates when the content will be displayed
+  - A ending date that indicates when the content stop to be displayed
+  - 3 radios buttons that indicates if content is displayed for everyone (all), only connected people (customer), or not connected people (anonymous).
+
+````
+"blocks":[
+      {
+        "type": "Settings",
+        "name": {
+          "en": "Settings",
+          "fr": "Configuration"
+        },
+        "settings": [
+          {
+            "type": "text",
+            "id": "start_date",
+            "label": "Start date"
+          },
+          {
+            "type": "text",
+            "id": "end_date",
+            "label": "End date"
+          },
+          {
+            "type": "radio",
+            "id": "display",
+            "options": [
+              { "value": "all", "label": "Tout le monde"},
+              { "value": "customer", "label": "Connecté"},
+              { "value": "anonymous", "label": "Non connecté"}
+            ],
+            "label": "Cible"
+          }
+        ]
+      }
+    ],
+````
+
+2. Then add this code at the top of your section :
+
+````
+{% assign customerAuthorized = false %}
+{% assign anonymousAuthorized = false %}
+{% assign allAuthorized = false %}
+{% assign display = false %}
+{% assign start_date = blank %}
+{% assign end_date = blank %}
+{% assign today_date = 'now' | date: '%s' %}
+
+{% if section.blocks[0].settings.start_date %}
+  {% assign start_date = section.blocks[0].settings.start_date | date: '%s' %}
+{% endif %}
+{% if section.blocks[0].settings.end_date %}
+  {% assign end_date = section.blocks[0].settings.end_date | date: '%s' %}
+{% endif %}
+
+{% if today_date >= start_date or start_date == blank %}
+  {% if today_date < end_date or end_date == blank %}
+    {% assign display = true %}
+  {% endif %}
+{% endif %}
+
+{% if display and customer and section.blocks[0].settings.display == "customer" %}
+  {% assign customerAuthorized = true %}
+{% endif %}
+{% unless customer %}
+  {% if display and section.blocks[0].settings.display == "anonymous" %}
+    {% assign anonymousAuthorized = true %}
+  {% endif %}
+{% endunless %}
+{% if display and section.blocks[0].settings.display == "all" or section.blocks[0].settings.display == nil %}
+  {% assign allAuthorized = true %}
+{% endif %}
+````
+3. Then add a test ont your code, based on these variables
+
+````
+{% if customerAuthorized or anonymousAuthorized or allAuthorized %} 
+    CODE
+{% endif %}
+````
 
 ## Image management
 https://www.shopify.com/partners/blog/img-url-filter
