@@ -1,0 +1,50 @@
+# Good to know about shopify
+
+- Not suited for brands that wish to have special offers
+- Nothing is native, everything is eitehr custom or app
+- Most features have a cost, all the modules have year/month plans.
+- Either you buy them, either you dev them (highly expensive) 
+- You need to have activated the shopify account in order to use apps like transporter, script editor and other
+- No shopify assistance unless the websote is already activated
+- Checkout custom : only possible once shopify + is installed
+- Rigid checkout : the checkout is not customizable easily, you must apply heavy overrides to it
+- Script Editor : App free on Shopify + lets you code special offers. But the client is not able to edit them if he doens not know about coding
+- Products : Limited number of variables, if needed to add more yu have to go through apps (like custom fields). 
+- Customers cannot edit their own personal info, to do this you have either to dev a custom app or use an existing app do to so. 
+- Customer info : no possibility of adding specific fields (like date of birth), only possible via third party apps (like custom fields) 
+- Email notifications : Native Emails (notifications) are not translatable 
+- No possiblity of addign cc recipents on email notifications
+- Back end product interface needs to be improved (pagination, number of products is not displayed, cannot choose the variables of the main product table for filtering... no config available) 
+- No native filter system
+
+## Not suited for : 
+- Complex websites or brands that might need specific promo offers, special gift card systems
+- Multilingual websites : native multilingual shopify system is based on hard coded non evolving catalogs and contents. In order to translate the website you might need an app (Weglot, Languify...) 
+
+# Apps
+
+## Script Editor 
+- Script editor is a free Shopify+ app that lets you create special scripts for specific promo codes and discounts. 
+- It can be used only once Shopify + is up and running
+
+## Transporter
+- Transporter is the Shopify+ app that lets you migrate customers, orders and many more from Magento to Shopify. 
+- It can be used only once Shopify + is up and running
+
+## Launchpad
+- Launchpad is a free Shopify+ app that lets you program events, prepublish special promo made with scrit editor, even switch themes for special content publication.
+- It can be used only once Shopify + is up and running
+
+## Bulk Account Inviter
+- Bulk Account Inviter is a free Shopify+ app that lets you run bulk invitations via email for all the existing customers after a website migration. For example if you refurb an old magento website you'll need this app in order to invite old customers to recreate their passwords. 
+- It can be used only once Shopify + is up and running
+
+## Custom fields by Bonify
+- Purpose : If you want to customize your products, pages, catalog etc with extra fields (ean, erp fields...) that are not available in the back office you'll need this App
+- Pricing : Free, LITE (7$/month), PREMIUM (19$/month - not available for Shopify+), PLUS (29$/month). 
+- Link : https://customfields.bonify.io/
+
+
+
+
+
