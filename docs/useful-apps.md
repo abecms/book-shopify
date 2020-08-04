@@ -84,6 +84,7 @@
 - Checkout : https://support.weglot.com/article/93-shopify---edition---how-to-edit-the-shopify-checkout-page-translations
 - Customer emails : For customer notifications, firstly, you have to add the customer_tag: true option to the tag (weglot_switcher.liquid) without forgetting the comma after api_key:
 
+```javascript
 <!--Start Weglot Script-->
 <script src="//cdn.weglot.com/weglot.min.js"></script>
 <script id="has-script-tags">
@@ -93,7 +94,7 @@
   });
 </script>
 <!--End Weglot Script-->
-
+``` 
 
 You can find it in your weglot_switcher.liquid file in your theme code snippet.
 
