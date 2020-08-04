@@ -10,7 +10,7 @@ module.exports = {
     {
       type: 'category',
       label: 'Setup',
-      items: ['introduction', 'setup'],
+      items: ['introduction', 'setup', 'useful-apps'],
     },
     {
       type: 'category',
