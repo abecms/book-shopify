@@ -84,6 +84,10 @@ end
 
 Par ailleurs, il est impossible de mettre des dates dans les scripts. Il faut donc utiliser launchpad pour planifier des opérations.
 
+> Toujours exclure les cartes cadeaux de vos opérations commerciales : `next if line_item.variant.product.gift_card?` ou `next if product.gift_card?`
+
+> Pour mettre en avant dans le panier ces promos panier, on pourra utiliser les variables liquid `line_item.original_line_price` et `line_item.message`.
+
 ### Expédition gratuite pour un type d'expédition spécifique et un montant > xeur
 ```
 # Ce script permet de proposer l'expédition gratuite pour le code du type d'expédition "Standard"
