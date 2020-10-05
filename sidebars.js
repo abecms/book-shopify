@@ -15,7 +15,7 @@ module.exports = {
     {
       type: 'category',
       label: 'Configuration',
-      items: ['config/config', 'config/product'],
+      items: ['config/config', 'config/back-office','config/product'],
     },
     {
       type: 'category',

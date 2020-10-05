@@ -2,7 +2,7 @@
 https://community.shopify.com/c/Shopify-APIs-SDKs/Adding-Metafield-on-a-productVariant-using-GraphQL/td-p/552212
 
 ````
-Input : 
+Input :
 
 {
 "input": {
@@ -18,7 +18,7 @@ Input :
  }
 }
 
-Mutation : 
+Mutation :
 
 mutation ($input: ProductVariantInput!) {
   productVariantUpdate(input: $input) {
