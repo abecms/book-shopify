@@ -11,4 +11,4 @@
 E.g.
   > You sell t-shirt in different size (xs, s, m, l) and color (red, orange, green)
 
-  ![product image 1](/static/img/product-img-1.png "product image 1")
+  ![product image 1](/img/product-img-1.png "product image 1")
