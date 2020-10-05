@@ -11,3 +11,5 @@ ex. :
 ![product image 1](/static/img/app-shopify-extensions.png "Extensions")
 
 ![product image 1](/static/img/app-shopify-add-extension.png "edit extension")
+
+![product image 1](/static/img/app-shopify-action.png "edit extension")
