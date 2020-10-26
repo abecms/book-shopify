@@ -81,19 +81,19 @@ window.ShpCustom = window.ShpCustom || {cart: {}};
     alert(data);
   };
 
-  ShpCustom.Cart.getCart = function() { 
+  ShpCustom.Cart.getCart = function() {
     var params = {
       type: 'GET',
       url: '/cart?view=mini',
       success: function(line_html) {
         if(line_html) {
           const $line_html = $(line_html);
-          // Get number of item in cart 
+          // Get number of item in cart
           const cartUpdateCount = $line_html.find('Put your ItemCount element class or Id e.g. .js-cart-update-count').text();
 
           $('Put your mini cart principal class or principal Id e.g. .cp-quick_cart').find('.product-items').replaceWith($line_html);
           $('Put your ItemCount element class or Id e.g. .js-cart-update-count').text(cartUpdateCount);
-          
+
           // Show the mini cart
           $('#popup-checkout').addClass('active');
         }
@@ -111,7 +111,7 @@ window.ShpCustom = window.ShpCustom || {cart: {}};
       url: '/cart/add.js',
       data: data,
       dataType: 'json',
-      success: function(line_item) { 
+      success: function(line_item) {
         if ((typeof callback) === 'function') {
           callback();
         }
