@@ -4,17 +4,17 @@ titre : Cart
 sidebar_label : Cart
 ---
 ## Table of contents
-- [Cart](#cart)
-  - [Table of contents](#table-of-contents)
-  - [Ajouter un produit automatiquement au panier](#ajouter-un-produit-automatiquement-au-panier)
-  - [Ajax - Mini Cart](#ajax---mini-cart)
-    - [Create the Liquid file](#create-the-liquid-file)
-    - [Create the JavaScript file](#create-the-javascript-file)
-    - [Update the layout file](#update-the-layout-file)
-    - [How to use it](#how-to-use-it)
-  - [Mini Cart](#mini-cart)
-    - [Create the Liquid file](#create-the-liquid-file-1)
-    - [Add payment button](#add-payment-button)
+- [Table of contents](#table-of-contents)
+- [Ajouter un produit automatiquement au panier](#ajouter-un-produit-automatiquement-au-panier)
+- [Ajax - Mini Cart](#ajax---mini-cart)
+  - [Create the Liquid file](#create-the-liquid-file)
+  - [Create the JavaScript file](#create-the-javascript-file)
+  - [Update the layout file](#update-the-layout-file)
+  - [How to use it](#how-to-use-it)
+- [Mini Cart](#mini-cart)
+  - [Create the Liquid file](#create-the-liquid-file-1)
+  - [Add payment button](#add-payment-button)
+- [Display Shipping rates estimates in the Cart](#display-shipping-rates-estimates-in-the-cart)
 
 ## Ajouter un produit automatiquement au panier
 
@@ -248,3 +248,6 @@ window.ShpCustom = window.ShpCustom || {cart: {}};
     ```html
       <button type="submit" name="checkout">{{ 'general.cart.payment' | t }}</button>
     ```
+
+## Display Shipping rates estimates in the Cart
+See https://community.shopify.com/c/Shopify-Design/Cart-Add-a-shipping-rates-calculator-to-your-cart/td-p/616554
