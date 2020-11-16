@@ -66,3 +66,30 @@ brew install themekit
 
 # VSCode plugin
 - Vscode Snippets : `https://marketplace.visualstudio.com/items?itemName=killalau.vscode-liquid-snippets`
+
+
+# Add custom domain
+
+## Configure your DNS
+
+1. Log in to the account that you have with your domain provider.
+1. Find your DNS settings. Look for your domain management area, DNS configuration, or similar.
+1. Your `A` record should point to Shopify's IP address, which is `23.227.38.65`
+1. Your `www` CNAME record should point to `shops.myshopify.com`
+
+ie :
+```dns
+@	  A	    300	  23.227.38.65
+www	CNAME	300	  shops.myshopify.com.
+```
+
+It takes usually 5 mins to spread.
+
+## Shopify Admin
+
+1. From your Shopify admin, go to Online Store > Domains.
+1. Click Connect existing domain.
+1. Enter the domain that you want to connect, such as example.com.
+1. Click Next.
+1. Click on Display instructions.
+1. Click on Verify
