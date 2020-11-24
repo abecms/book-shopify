@@ -93,3 +93,11 @@ It takes usually 5 mins to spread.
 1. Click Next.
 1. Click on Display instructions.
 1. Click on Verify
+
+## Multiple domains
+
+If you have multiple domains and you want to redirect all to one URL  
+ie: you have the example.com and example.fr and you want all to go to example.com
+
+1. You have to configure ALL your domains dns with the previouses configuration
+1. In Shopify Admin ALL domains must be connected and the default domain must be example.com
