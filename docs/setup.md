@@ -101,3 +101,13 @@ ie: you have the example.com and example.fr and you want all to go to example.co
 
 1. You have to configure ALL your domains dns with the previouses configuration
 1. In Shopify Admin ALL domains must be connected and the primary domain must be example.com
+
+## Spd record for sending emails from your custom domain.
+
+Find your domain's TXT record. This usually appears beside the CNAME record and MX record.
+Add the following SPF record to your TXT record: v=spf1 include:shops.shopify.com ~all
+Save your changes.
+
+```dns
+@	TXT	300	v=spf1 include:shops.shopify.com ~all
+```
