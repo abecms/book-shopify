@@ -47,6 +47,11 @@ module.exports = {
         },
         {
           type: 'category',
+          label: 'Modules',
+          items: ['modules/introduction','modules/alertstock','modules/chronopost','modules/cms','modules/fastmag','modules/socloz','modules/systempay','modules/target2sell'],
+        },
+        {
+          type: 'category',
           label: 'Import',
           items: [
             {

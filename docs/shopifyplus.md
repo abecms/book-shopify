@@ -643,3 +643,442 @@ end
 
 Output.cart = Input.cart
 ```
+
+### Acheter X quantité du produit A, obtenir le produit B pour y (réduction en % ou montant)
+
+```
+# ================================================================
+# Launch campaign if discount code is present
+#
+# ================================================================
+CODE = 'CADEAU15'
+
+# ================================ Customizable Settings ================================
+# ================================================================
+# Tiered Discounts by Spend Threshold
+#
+# If the cart total is greater than (or equal to) an entered
+# threshold, the associated discount is applied to the cart. The
+# discount will be spread, as evenly as possible, across all line
+# items.
+#
+# - 'threshold' is the spend amount needed to qualify
+# - 'discount_amount' is the dollar discount to apply to the
+# cart
+# - 'discount_message' is the message to show when a discount
+# is applied
+# ================================================================
+SPENDING_THRESHOLDS_FILTERED_TAG = [
+  {
+    product_selector_match_type: :include,
+    product_selector_type: :tag,
+    product_selectors: ["season_H20"],
+    tiers: [
+      {
+        threshold: 75,
+        discount_type: :dollar,
+        discount_amount: 15,
+        discount_message: 'Remise CADEAU15',
+      }
+    ]
+  }
+]
+
+
+BUY_X_GET_Y_FOR_Z = [
+  {
+    product_selector_match_type: :include,
+    product_selector_type: :tag,
+    product_selectors: ["operation_noel"],
+    quantity_to_buy: 1,
+    quantity_to_discount: 1,
+    discount_type: :percent,
+    discount_amount: 50,
+    discount_message: 'Un artcle acheté, 50% de remise sur le deuxième!',
+  },
+]
+
+# ================================================================
+# ProductSelector
+#
+# Finds matching products by the entered criteria.
+# ================================================================
+class ProductSelector2
+  def initialize(match_type, selector_type, selectors)
+    @match_type = match_type
+    @comparator = match_type == :include ? 'any?' : 'none?'
+    @selector_type = selector_type
+    @selectors = selectors
+  end
+
+  def match?(line_item)
+    if self.respond_to?(@selector_type)
+      self.send(@selector_type, line_item)
+    else
+      raise RuntimeError.new('Invalid product selector type')
+    end
+  end
+
+  def tag(line_item)
+    product_tags = line_item.variant.product.tags.map { |tag| tag.downcase.strip }
+    @selectors = @selectors.map { |selector| selector.downcase.strip }
+    (@selectors & product_tags).send(@comparator)
+  end
+
+  def type(line_item)
+    @selectors = @selectors.map { |selector| selector.downcase.strip }
+    (@match_type == :include) == @selectors.include?(line_item.variant.product.product_type.downcase.strip)
+  end
+
+  def vendor(line_item)
+    @selectors = @selectors.map { |selector| selector.downcase.strip }
+    (@match_type == :include) == @selectors.include?(line_item.variant.product.vendor.downcase.strip)
+  end
+
+  def product_id(line_item)
+    (@match_type == :include) == @selectors.include?(line_item.variant.product.id)
+  end
+
+  def variant_id(line_item)
+    (@match_type == :include) == @selectors.include?(line_item.variant.id)
+  end
+
+  def all(line_item)
+    true
+  end
+end
+
+# ================================================================
+# DiscountApplicator
+#
+# Applies the entered discount to the supplied line item.
+# ================================================================
+class DiscountApplicator2
+  def initialize(discount_type, discount_amount, discount_message)
+    @discount_type = discount_type
+    @discount_message = discount_message
+
+    @discount_amount = if discount_type == :percent
+      1 - (discount_amount * 0.01)
+    else
+      Money.new(cents: 100) * discount_amount
+    end
+  end
+
+  def apply(line_item)
+    new_line_price = if @discount_type == :percent
+      line_item.line_price * @discount_amount
+    else
+      [line_item.line_price - (@discount_amount * line_item.quantity), Money.zero].max
+    end
+
+    line_item.change_line_price(new_line_price, message: @discount_message)
+  end
+end
+
+# ================================================================
+# BuyXGetYForZCampaign
+#
+# Buy a certain number of "matching" items, get a certain number
+# of the same matching items with the entered discount applied.
+# ================================================================
+class BuyXGetYForZCampaign
+  def initialize(campaigns)
+    @campaigns = campaigns
+  end
+
+  def run(cart)
+    @campaigns.each do |campaign|
+      product_selector = ProductSelector2.new(
+        campaign[:product_selector_match_type],
+        campaign[:product_selector_type],
+        campaign[:product_selectors],
+      )
+
+      eligible_items = cart.line_items.select { |line_item| product_selector.match?(line_item) }
+
+      next if eligible_items.nil?
+
+      eligible_items = eligible_items.sort_by { |line_item| -line_item.variant.price }
+      quantity_to_buy = campaign[:quantity_to_buy]
+      quantity_to_discount = campaign[:quantity_to_discount]
+      bundle_size = quantity_to_buy + quantity_to_discount
+      number_of_bundles = (eligible_items.map(&:quantity).reduce(0, :+) / bundle_size).floor
+      number_of_discountable_items = number_of_bundles * quantity_to_discount
+
+      next unless number_of_discountable_items > 0
+
+      discount_applicator = DiscountApplicator2.new(
+        campaign[:discount_type],
+        campaign[:discount_amount],
+        campaign[:discount_message]
+      )
+
+      self.loop_items(
+        discount_applicator, cart, eligible_items, number_of_discountable_items, quantity_to_buy, quantity_to_discount
+      )
+    end
+  end
+
+  def loop_items(discount_applicator, cart, line_items, num_to_discount, quantity_to_buy, quantity_to_discount)
+    surplus = 0
+    bundle_size = quantity_to_buy + quantity_to_discount
+
+    line_items.each do |line_item|
+      line_quantity = line_item.quantity + surplus
+
+      if line_quantity > quantity_to_buy
+        bundles_per_line = (line_quantity / bundle_size).floor
+        take_quantity = bundles_per_line * quantity_to_discount
+        surplus += (line_quantity - (bundle_size * bundles_per_line))
+
+        if line_item.quantity > take_quantity
+          discount_item = line_item.split(take: take_quantity)
+          discount_applicator.apply(discount_item)
+          position = cart.line_items.find_index(line_item)
+          cart.line_items.insert(position + 1, discount_item)
+          num_to_discount -= take_quantity
+        else
+          discount_applicator.apply(line_item)
+          num_to_discount -= line_item.quantity
+        end
+      else
+        surplus += line_quantity
+      end
+
+      break if num_to_discount <= 0
+    end
+  end
+end
+
+# ================================ Script Code (do not edit) ================================
+# ================================================================
+# DollarDiscountApplicator
+#
+# Applies the entered discount to the supplied line item.
+# ================================================================
+class DollarDiscountApplicator
+  def initialize(discount_message)
+    @discount_message = discount_message
+  end
+
+  def apply(line_item, discount_amount)
+    new_line_price = line_item.line_price - discount_amount
+    line_item.change_line_price(new_line_price, message: @discount_message)
+  end
+end
+
+# ================================================================
+# TieredDiscountBySpendCampaign
+#
+# If the cart total is greater than (or equal to) an entered
+# threshold, the associated discount is applied to the cart. The
+# discount will be spread, as evenly as possible, across all line
+# items.
+# ================================================================
+class TieredDiscountBySpendAndTagCampaign
+  def initialize(campaigns)
+    @campaigns = campaigns
+    #@tiers = campaign.tiers.sort_by { |tier| tier[:threshold] }.reverse
+  end
+
+  def run(cart)
+    @campaigns.each do |campaign|
+      product_selector = ProductSelector.new(
+        campaign[:product_selector_match_type],
+        campaign[:product_selector_type],
+        campaign[:product_selectors],
+      )
+      tiers = campaign[:tiers].sort_by { |tier| tier[:threshold] }.reverse
+      applicable_items = cart.line_items.select { |line_item| product_selector.match?(line_item) }
+      next if applicable_items.nil?
+
+      total_applicable_cost = applicable_items.map(&:line_price).reduce(Money.zero, :+)
+      applicable_tier = tiers.find { |tier|  total_applicable_cost >= (Money.new(cents: 100) * tier[:threshold]) }
+
+      next if applicable_tier.nil?
+
+      #discount_applicator = DiscountApplicator.new(
+      # applicable_tier[:discount_type],
+      #  applicable_tier[:discount_amount],
+      #  applicable_tier[:discount_message]
+      #)
+
+      #applicable_items.each do |line_item|
+      #  discount_applicator.apply(line_item)
+      #end
+
+      return if applicable_tier.nil?
+
+      discount_applicator = DollarDiscountApplicator.new(applicable_tier[:discount_message])
+      discount_amount = applicable_tier[:discount_amount]
+      items = applicable_items.sort_by { |line_item| line_item.variant.price }
+      self.loop_items(cart, items, discount_amount, discount_applicator)
+    end
+  end
+
+  def loop_items(cart, line_items, discount_amount, discount_applicator)
+    avg_discount = (discount_amount.to_f * (1 / line_items.map(&:quantity).reduce(0, :+))).round(2)
+    avg_discount = Money.new(cents: 100) * avg_discount
+    discount_amount = Money.new(cents: 100) * discount_amount
+
+    line_items.each_with_index do |line_item, index|
+      break if discount_amount <= Money.zero
+
+      line_discount = avg_discount * line_item.quantity
+
+      if discount_amount < line_discount || index == (line_items.size - 1)
+        discount_update = line_item.line_price > discount_amount ? discount_amount : line_item.line_price
+      else
+        discount_update = line_item.line_price > line_discount ? line_discount : line_item.line_price
+      end
+
+      discount_amount -= discount_update
+      discount_applicator.apply(line_item, discount_update)
+    end
+  end
+end
+
+# ================================ Script Code (do not edit) ================================
+# ================================================================
+# ProductSelector
+#
+# Finds matching products by the entered criteria.
+# ================================================================
+class ProductSelector
+  def initialize(match_type, selector_type, selectors)
+    @match_type = match_type
+    @comparator = match_type == :include ? 'any?' : 'none?'
+    @selector_type = selector_type
+    @selectors = selectors
+  end
+
+  def match?(line_item)
+    if @selector_type == :tag
+      product_tags = line_item.variant.product.tags.map { |tag| tag.downcase.strip }
+      @selectors = @selectors.map { |selector| selector.downcase.strip }
+      (@selectors & product_tags).send(@comparator)
+    elsif @selector_type == :type
+      @selectors = @selectors.map { |selector| selector.downcase.strip }
+      (@match_type == :include) == @selectors.include?(line_item.variant.product.product_type.downcase.strip)
+    elsif @selector_type == :vendor
+      @selectors = @selectors.map { |selector| selector.downcase.strip }
+      (@match_type == :include) == @selectors.include?(line_item.variant.product.vendor.downcase.strip)
+    elsif @selector_type == :product_id
+      (@match_type == :include) == @selectors.include?(line_item.variant.product.id)
+    elsif @selector_type == :variant_id
+      (@match_type == :include) == @selectors.include?(line_item.variant.id)
+    else
+      raise RuntimeError.new('Invalid product selector type')
+    end
+  end
+end
+
+# ================================================================
+# DiscountApplicator
+#
+# Applies the entered discount to the supplied line item.
+# ================================================================
+class DiscountApplicator
+  def initialize(discount_type, discount_amount, discount_message)
+    @discount_type = discount_type
+    @discount_message = discount_message
+
+    @discount_amount = if discount_type == :percent
+      1 - (discount_amount * 0.01)
+    else
+      Money.new(cents: 100) * discount_amount
+    end
+  end
+
+  def apply(line_item)
+    new_line_price = if @discount_type == :percent
+      line_item.line_price * @discount_amount
+    else
+      [line_item.line_price - (@discount_amount * line_item.quantity), Money.zero].max
+    end
+
+    line_item.change_line_price(new_line_price, message: @discount_message)
+  end
+end
+
+# ================================================================
+# PlayCampaignIfDiscountCodePresent
+#
+#
+# ================================================================
+
+class EnableCampaignIfCodeCampaign
+  def initialize(code, campaign)
+    @campaign = campaign
+    @code = code
+  end
+
+  def run(cart)
+    return unless !cart.discount_code.nil? && cart.discount_code.code == @code
+
+    @campaign.run(Input.cart)
+  end
+end
+
+CAMPAIGNS = [
+  BuyXGetYForZCampaign.new(BUY_X_GET_Y_FOR_Z),
+]
+
+CAMPAIGNS.each do |campaign|
+  campaign.run(Input.cart)
+end
+
+Output.cart = Input.cart
+
+```
+
+### Acheter 2 ou + du produit A et obtenez x% de réduction sur le produit le moins cher du panier
+
+```
+DISCOUNT_PERCENT=30
+CART_DISCOUNT_MESSAGE="Buy 2 or more items and get 30% off the least expensive item"
+
+
+eligible_items = Input.cart.line_items.select do |line_item|
+  product = line_item.variant.product
+  !product.gift_card?
+end
+
+# Sort eligible items by price, least exensive first
+eligible_items = eligible_items.sort_by{|line_item| line_item.variant.price}
+
+total_items = 0
+eligible_items.each do |line_item|
+  total_items += line_item.quantity
+end
+
+if(total_items >= 2)
+  # pull the least exensive item
+  line_item = eligible_items.first
+  # calculate the discount to be applied
+  percent = Decimal.new(DISCOUNT_PERCENT) / 100.0
+
+
+  # make sure we don't discount multiple items hiding in a single line item
+  if line_item.quantity == 1
+    line_discount = line_item.line_price * percent
+    puts "line_discount = #{line_discount}"
+    # Just discount the item directly
+    line_item.change_line_price(line_item.line_price - line_discount, message: CART_DISCOUNT_MESSAGE)
+  else
+    # If only part of the item must be discounted, split the item
+    discounted_item = line_item.split(take: 1)
+    # Insert the newly-created item in the cart, right after the original item
+    position = Input.cart.line_items.find_index(line_item)
+    line_discount = discounted_item.line_price * percent
+    puts "line_discount = #{line_discount}"
+    Input.cart.line_items.insert(position + 1, discounted_item)
+    # Discount the new item
+    discounted_item.change_line_price(discounted_item.line_price - line_discount, message: CART_DISCOUNT_MESSAGE)
+  end
+end
+
+
+Output.cart = Input.cart
+```
