@@ -40,7 +40,7 @@
 
 To build you own theme you should have
 * a private app with api key and a password.
-* themekit installed on your dev env.
+* shopify cli installed on your dev env.
 
 ## Create private apps
 
@@ -56,13 +56,25 @@ To build you own theme you should have
 # Development Environment
 - Shopify uses jQuery and scss shopify is able to compile them from his servers.
 
-1. Install Themekit on MacOs
+1. Install shopify-cli on MacOs
 ```
 brew tap shopify/shopify
-brew install themekit
+brew install shopify-cli
 ```
-2. clone the project
-3. run ```theme watch```
+1. Initialize a new theme
+```
+shopify theme init
+```
+1. Auth with shopify-cli
+```
+shopify login --store my-store.myshopify.com
+```
+1. Develop my theme
+```
+shopify theme serve
+```
+3. init git into the project
+
 
 # VSCode plugin
 - Vscode Snippets : `https://marketplace.visualstudio.com/items?itemName=killalau.vscode-liquid-snippets`
