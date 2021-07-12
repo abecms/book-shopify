@@ -1,0 +1,1 @@
+(self.webpackChunknewshopify=self.webpackChunknewshopify||[]).push([[256],{5256:function(e,s,n){"use strict";n.r(s)}}]);
