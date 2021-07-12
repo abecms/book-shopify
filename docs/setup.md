@@ -61,19 +61,20 @@ To build you own theme you should have
 brew tap shopify/shopify
 brew install shopify-cli
 ```
-1. Initialize a new theme
+2. Initialize a new theme
 ```
 shopify theme init
 ```
-1. Auth with shopify-cli
+3. Auth with shopify-cli
 ```
 shopify login --store my-store.myshopify.com
 ```
-1. Develop my theme
+4. Develop my theme
+- You have to be authorized to manage the theme from the store (add your as collborator) : https://my-store.myshopify.com/admin/settings/account
 ```
 shopify theme serve
 ```
-3. init git into the project
+5. init git into the project
 
 
 # VSCode plugin
