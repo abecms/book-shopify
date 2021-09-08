@@ -3,6 +3,7 @@ Les apps ci-dessous n'existent que pour shopify+
 
 # Migrer de Magento vers Shopify
 https://apps.shopify.com/transporter
+How to use Transporter : https://github.com/Shopify/shopify_transporter 
 
 # Planifier des changements de contenu du site
 https://apps.shopify.com/launchpad
