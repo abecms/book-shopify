@@ -125,3 +125,48 @@ Save your changes.
 ```dns
 @ TXT 300 v=spf1 include:shops.shopify.com ~all
 ```
+# Reorder Payment Gateways
+
+- Allez dans Script Editor
+- Créer un nouveau script :
+    - Type `Payment gateways`
+    - Puis Choisir `Reorder payment gateways`
+- Coller le script ci-dessous en changeant l'ordre souhaité dans `DESIRED_GATEWAY_ORDER`
+
+```
+# ================================ Customizable Settings ================================
+# ================================================================
+# Reorder Gateways
+#
+# The order in which you would like your gateways to display
+# ================================================================
+DESIRED_GATEWAY_ORDER = [
+  "systempay", "paypal"
+]
+
+# ================================ Script Code (do not edit) ================================
+# ================================================================
+# ReorderGatewaysCampaign
+#
+# Reorders gateways into the entered order
+# ================================================================
+class ReorderGatewaysCampaign
+  def initialize(desired_order)
+    @desired_order = desired_order.map { |item| item.downcase.strip }
+  end
+
+  def run(cart, payment_gateways)
+    payment_gateways.sort_by! { |payment_gateway| @desired_order.index(payment_gateway.name.downcase.strip) || Float::INFINITY }
+  end
+end
+
+CAMPAIGNS = [
+  ReorderGatewaysCampaign.new(DESIRED_GATEWAY_ORDER),
+]
+
+CAMPAIGNS.each do |campaign|
+  campaign.run(Input.cart, Input.payment_gateways)
+end
+
+Output.payment_gateways = Input.payment_gateways
+```
