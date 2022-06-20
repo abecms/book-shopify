@@ -297,3 +297,8 @@ sidebar_label : Product
   ```
 * Don't forget to add class to :
   - **Add To Cart Button** `js-add-to-cart`
+
+## Media
+
+link for supported media
+`https://help.shopify.com/en/manual/products/product-media/product-media-types`
