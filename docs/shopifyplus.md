@@ -1082,3 +1082,105 @@ end
 
 Output.cart = Input.cart
 ```
+
+### BOGO: Buy 3 products get 1 free or a discount
+
+```
+# ================================================================
+# Pour n produits achetés, le n+1 le moins cher avec réduction (ou gratuit)
+# ex. Pour 2 produits de la collection H2022 achetés, le 3ème offert
+# ================================================================
+BOGO = [
+  {
+    product_selector_match_type: :include,
+    product_selector_type: :tag,
+    product_selectors: ["essentiels_H22"],
+    product_quantity: 3,
+    discount: {
+      discount_type: :percent,
+      discount_amount: 100,
+      discount_message: 'Le 3ème article offert pour 2 achetés',
+    },
+  }
+]
+
+# ================================================================
+# Bogo
+#
+# ================================================================
+class BogoCampaign
+  def initialize(campaigns)
+    @campaigns = campaigns
+    #@tiers = campaign.tiers.sort_by { |tier| tier[:threshold] }.reverse
+  end
+
+  def run(cart)
+    @campaigns.each do |campaign|
+      product_selector = ProductSelector.new(
+        campaign[:product_selector_match_type],
+        campaign[:product_selector_type],
+        campaign[:product_selectors],
+      )
+      if campaign.include?(:product_selector_match_type2)
+        product_selector2 = ProductSelector.new(
+          campaign[:product_selector_match_type2],
+          campaign[:product_selector_type2],
+          campaign[:product_selectors2],
+        )
+      end
+      eligible_items = cart.line_items.select { |line_item| product_selector.match?(line_item) }
+      if campaign.include?(:product_selector_match_type2)
+        eligible_items = eligible_items.select { |line_item| product_selector2.match?(line_item) }
+      end
+      next if eligible_items.nil?
+
+      # Sort eligible items by price, least exensive first
+      eligible_items = eligible_items.sort_by{|line_item| line_item.variant.price}
+
+      total_items = eligible_items.map(&:quantity).reduce(0, :+)
+
+      if(total_items >= campaign[:product_quantity])
+        # pull the least exensive item
+        line_item = eligible_items.first
+        discount_applicator = DiscountApplicator.new(
+          campaign[:discount][:discount_type],
+          campaign[:discount][:discount_amount],
+          campaign[:discount][:discount_message]
+        )
+
+        # make sure we don't discount multiple items hiding in a single line item
+        if line_item.quantity == 1
+          discount_applicator.apply(line_item)
+        else
+          # If only part of the item must be discounted, split the item
+          discounted_item = line_item.split(take: 1)
+          # Insert the newly-created item in the cart, right after the original item
+          position = Input.cart.line_items.find_index(line_item)
+          Input.cart.line_items.insert(position + 1, discounted_item)
+          # Discount the new item
+          discount_applicator.apply(discounted_item)
+        end
+      end
+
+      #applicable_items.each do |line_item|
+      #  discount_applicator.apply(line_item)
+      #end
+    end
+  end
+end
+
+CAMPAIGNS = [
+  #TieredPricingCampaign.new(PRODUCT_DISCOUNT_TIERS),
+  EnableCampaignIfCodeCampaign.new('HIVER22', TieredDiscountBySpendAndTagCampaign.new(SPENDING_THRESHOLDS_FILTERED_TAG_REVISITE)),
+  EnableCampaignIfCodeCampaign.new('BIENVENUE', TieredDiscountPercentBySpendAndTagCampaign.new(SPENDING_THRESHOLDS_FILTERED_TAG_BIENVENUE)),
+  TieredDiscountPercentByQuantityAndTagCampaign.new(SPENDING_THRESHOLDS_FILTERED_TAG_RULE1),
+  TieredDiscountPercentByQuantityAndTagCampaign.new(SPENDING_THRESHOLDS_FILTERED_TAG_RULE2),
+  BogoCampaign.new(BOGO)
+]
+
+CAMPAIGNS.each do |campaign|
+  campaign.run(Input.cart)
+end
+
+Output.cart = Input.cart
+```
