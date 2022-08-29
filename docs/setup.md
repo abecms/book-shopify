@@ -40,7 +40,7 @@
 
 To build you own theme you should have
 * a private app with api key and a password.
-* themekit installed on your dev env.
+* shopify cli installed on your dev env.
 
 ## Create private apps
 
@@ -56,13 +56,26 @@ To build you own theme you should have
 # Development Environment
 - Shopify uses jQuery and scss shopify is able to compile them from his servers.
 
-1. Install Themekit on MacOs
+1. Install shopify-cli on MacOs
 ```
 brew tap shopify/shopify
-brew install themekit
+brew install shopify-cli
 ```
-2. clone the project
-3. run ```theme watch```
+2. Initialize a new theme
+```
+shopify theme init
+```
+3. Auth with shopify-cli
+```
+shopify login --store my-store.myshopify.com
+```
+4. Develop my theme
+- You have to be authorized to manage the theme from the store (add your as collborator) : https://my-store.myshopify.com/admin/settings/account
+```
+shopify theme serve
+```
+5. init git into the project
+
 
 # VSCode plugin
 - Vscode Snippets : `https://marketplace.visualstudio.com/items?itemName=killalau.vscode-liquid-snippets`
@@ -111,4 +124,49 @@ Save your changes.
 
 ```dns
 @ TXT 300 v=spf1 include:shops.shopify.com ~all
+```
+# Reorder Payment Gateways
+
+- Allez dans Script Editor
+- Créer un nouveau script :
+    - Type `Payment gateways`
+    - Puis Choisir `Reorder payment gateways`
+- Coller le script ci-dessous en changeant l'ordre souhaité dans `DESIRED_GATEWAY_ORDER`
+
+```
+# ================================ Customizable Settings ================================
+# ================================================================
+# Reorder Gateways
+#
+# The order in which you would like your gateways to display
+# ================================================================
+DESIRED_GATEWAY_ORDER = [
+  "systempay", "paypal"
+]
+
+# ================================ Script Code (do not edit) ================================
+# ================================================================
+# ReorderGatewaysCampaign
+#
+# Reorders gateways into the entered order
+# ================================================================
+class ReorderGatewaysCampaign
+  def initialize(desired_order)
+    @desired_order = desired_order.map { |item| item.downcase.strip }
+  end
+
+  def run(cart, payment_gateways)
+    payment_gateways.sort_by! { |payment_gateway| @desired_order.index(payment_gateway.name.downcase.strip) || Float::INFINITY }
+  end
+end
+
+CAMPAIGNS = [
+  ReorderGatewaysCampaign.new(DESIRED_GATEWAY_ORDER),
+]
+
+CAMPAIGNS.each do |campaign|
+  campaign.run(Input.cart, Input.payment_gateways)
+end
+
+Output.payment_gateways = Input.payment_gateways
 ```
